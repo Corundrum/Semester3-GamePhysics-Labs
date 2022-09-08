@@ -8,6 +8,8 @@
 #include "Button.h"
 #include "Label.h"
 
+const float PHYSICS_TIMESTAMP = 1.0f / 60.0f;
+
 class PlayScene : public Scene
 {
 public:
@@ -24,22 +26,19 @@ private:
 	// IMGUI Function
 	void GUI_Function();
 	std::string m_guiTitle;
-	
-	glm::vec2 m_mousePosition;
 
 	Plane* m_pPlaneSprite{};
 	Player* m_pPlayer{};
-	bool m_playerFacingRight{};
 
-	// UI Items
-	Button* m_pBackButton{};
-	Button* m_pNextButton{};
-	Label* m_pInstructionsLabel{};
+	
 
-	// Input Control
-	int m_pCurrentInputType{};
-	void GetPlayerInput();
-	void GetKeyboardInput();
+	float t = 0.0f;
+	float dt = PHYSICS_TIMESTAMP;
+	float a = 1.0f;
+	float b = 100.0f;
+	float c = 100.0f;
+	float d = 100.0f;
+
 };
 
 #endif /* defined (__PLAY_SCENE__) */
