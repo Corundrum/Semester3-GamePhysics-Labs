@@ -28,6 +28,7 @@ private:
 	std::string m_guiTitle;
 
 	Plane* m_pPlaneSprite{};
+	Plane* m_pPlaneSprite2{};
 	Player* m_pPlayer{};
 
 	
