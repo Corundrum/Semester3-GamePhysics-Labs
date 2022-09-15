@@ -29,12 +29,10 @@ private:
 
 	Plane* m_pPlaneSprite{};
 	Player* m_pPlayer{};
-	bool m_playerFacingRight{};
 
-	// UI Items
-	Button* m_pBackButton{};
-	Button* m_pNextButton{};
-	Label* m_pInstructionsLabel{};
+	float m_angleDegrees = 0;
+	float m_speed = 10; // px/s
+	glm::vec2 m_startPosition = glm::vec2(0,500);
 
 	// Input Control
 	int m_pCurrentInputType{};
