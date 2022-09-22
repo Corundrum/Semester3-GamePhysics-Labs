@@ -143,8 +143,10 @@ void PlayScene::GUI_Function()
 
 	ImGui::SliderFloat("Angle", &m_angleDegrees, 0, 360);
 	ImGui::SliderFloat("Speed", &m_speed, 0, 1000);
+	ImGui::SliderFloat("Gravity", &m_gravity, 0, 100);
 	ImGui::SliderFloat2("Start Position", &(m_startPosition.x), 0, 600);
 	
+
 	glm::vec2 velocity = AngleMagnitudeToVec2(m_angleDegrees, m_speed);
 	
 	ImGui::LabelText("Velocity", "x:%f, y:%f", velocity.x, velocity.y);
