@@ -3,10 +3,9 @@
 #define __PLAY_SCENE__
 
 #include "Scene.h"
-#include "Plane.h"
-#include "Player.h"
 #include "Button.h"
 #include "Label.h"
+#include "Target.h"
 
 class PlayScene : public Scene
 {
@@ -27,12 +26,11 @@ private:
 	
 	glm::vec2 m_mousePosition;
 
-	Plane* m_pPlaneSprite{};
-	Player* m_pPlayer{};
+	Target* m_pBall;
 
 	float m_angleDegrees = 0;
 	float m_speed = 100; // px/s
-	glm::vec2 m_startPosition = glm::vec2(0,500);
+	glm::vec2 m_startPosition = glm::vec2(100,300);
 
 	// Input Control
 	int m_pCurrentInputType{};

@@ -48,7 +48,7 @@ void PlayScene::Update()
 {
 	UpdateDisplayList();
 
-	m_angleDegrees += 11;
+	//m_angleDegrees += 11;
 
 	if (m_angleDegrees > 360)
 	{
@@ -79,6 +79,11 @@ void PlayScene::GetPlayerInput()
 
 void PlayScene::GetKeyboardInput()
 {
+	if (EventManager::Instance().KeyPressed(SDL_SCANCODE_SPACE))
+	{
+		m_pBall->GetTransform()->position.x += 100;
+	}
+
 	if (EventManager::Instance().IsKeyDown(SDL_SCANCODE_ESCAPE))
 	{
 		Game::Instance().Quit();
@@ -99,10 +104,11 @@ void PlayScene::Start()
 {
 	// Set GUI Title
 	m_guiTitle = "Play Scene";
-	
-	// Plane Sprite
-	m_pPlaneSprite = new Plane();
-	AddChild(m_pPlaneSprite);
+
+	m_pBall = new Target;
+	AddChild(m_pBall);
+	m_pBall->GetTransform()->position = glm::vec2(100, 300);
+
 
 	/* DO NOT REMOVE */
 	ImGuiWindowFrame::Instance().SetGuiFunction([this] { GUI_Function(); });
