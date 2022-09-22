@@ -31,10 +31,7 @@ private:
 	float m_angleDegrees = 0;
 	float m_speed = 100; // px/s
 	glm::vec2 m_startPosition = glm::vec2(100,300);
-
-	float m_launchAngle;
-	float m_accelerationGravity;
-	float m_launchSpeed;
+	float m_gravity = 9.8;
 
 	bool BallLaunched = 0;
 

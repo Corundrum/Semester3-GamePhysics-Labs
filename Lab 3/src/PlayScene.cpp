@@ -56,7 +56,9 @@ void PlayScene::Update()
 
 	if (BallLaunched)
 	{
-		m_pBall->GetTransform()->position += AngleMagnitudeToVec2(m_angleDegrees, m_speed) * (1.0f/60.0f);
+		m_pBall->GetRigidBody()->acceleration.y = m_gravity;
+		m_pBall->GetRigidBody()->velocity += m_pBall->GetRigidBody()->acceleration * (1.0f/60.0f);
+
 	}
 
 }
@@ -88,12 +90,14 @@ void PlayScene::GetKeyboardInput()
 		if (BallLaunched)
 		{
 			BallLaunched = 0;
+			m_pBall->GetRigidBody()->velocity = glm::vec2(0.0f, 0.0f);
 			m_pBall->GetTransform()->position = m_startPosition;
 		}
 		else
 		{
 			BallLaunched = 1;
 			//Code for launching ball
+			m_pBall->GetRigidBody()->velocity = AngleMagnitudeToVec2(m_angleDegrees, m_speed) * (1.0f / 60.0f);
 		}
 	}
 
