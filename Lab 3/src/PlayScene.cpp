@@ -49,10 +49,14 @@ void PlayScene::Update()
 	UpdateDisplayList();
 
 	//m_angleDegrees += 11;
+	//if (m_angleDegrees > 360)
+	//{
+	//	m_angleDegrees -= 360;
+	//}
 
-	if (m_angleDegrees > 360)
+	if (BallLaunched)
 	{
-		m_angleDegrees -= 360;
+		m_pBall->GetTransform()->position += AngleMagnitudeToVec2(m_angleDegrees, m_speed) * (1.0f/60.0f);
 	}
 
 }
@@ -68,8 +72,8 @@ void PlayScene::HandleEvents()
 	EventManager::Instance().Update();
 
 	GetPlayerInput();
-
 	GetKeyboardInput();
+
 }
 
 void PlayScene::GetPlayerInput()
@@ -81,7 +85,16 @@ void PlayScene::GetKeyboardInput()
 {
 	if (EventManager::Instance().KeyPressed(SDL_SCANCODE_SPACE))
 	{
-		m_pBall->GetTransform()->position.x += 100;
+		if (BallLaunched)
+		{
+			BallLaunched = 0;
+			m_pBall->GetTransform()->position = m_startPosition;
+		}
+		else
+		{
+			BallLaunched = 1;
+			//Code for launching ball
+		}
 	}
 
 	if (EventManager::Instance().IsKeyDown(SDL_SCANCODE_ESCAPE))
@@ -107,7 +120,7 @@ void PlayScene::Start()
 
 	m_pBall = new Target;
 	AddChild(m_pBall);
-	m_pBall->GetTransform()->position = glm::vec2(100, 300);
+	m_pBall->GetTransform()->position = m_startPosition;
 
 
 	/* DO NOT REMOVE */

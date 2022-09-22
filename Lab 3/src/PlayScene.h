@@ -32,6 +32,12 @@ private:
 	float m_speed = 100; // px/s
 	glm::vec2 m_startPosition = glm::vec2(100,300);
 
+	float m_launchAngle;
+	float m_accelerationGravity;
+	float m_launchSpeed;
+
+	bool BallLaunched = 0;
+
 	// Input Control
 	int m_pCurrentInputType{};
 	void GetPlayerInput();
