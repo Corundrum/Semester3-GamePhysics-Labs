@@ -1,5 +1,7 @@
 #include "Target.h"
 #include "TextureManager.h"
+#include "PhysicsManager.h"
+#include "Game.h"
 
 
 Target::Target()
@@ -27,23 +29,9 @@ void Target::Draw()
 
 void Target::Update()
 {
-	Move();
-	CheckBounds();
+
 }
 
 void Target::Clean()
-{
-}
-
-void Target::Move()
-{
-	GetTransform()->position += GetRigidBody()->velocity * (1.0f / 60.0f);
-}
-
-void Target::CheckBounds()
-{
-}
-
-void Target::Reset()
 {
 }

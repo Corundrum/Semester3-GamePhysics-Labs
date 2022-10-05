@@ -2,22 +2,19 @@
 #ifndef __TARGET__
 #define __TARGET__
 
-#include "DisplayObject.h"
+#include "PhysicsObject.h"
 
-class Target final : public DisplayObject {
+class Target final : public PhysicsObject {
 public:
 	Target();
 	~Target() override;
 
 	// Inherited via GameObject
 	virtual void Draw() override;
-	virtual void Update() override;
+	virtual void Update();
 	virtual void Clean() override;
 
 private:
-	void Move();
-	void CheckBounds();
-	void Reset();
 };
 
 

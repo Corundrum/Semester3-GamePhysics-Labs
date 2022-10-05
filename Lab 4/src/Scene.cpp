@@ -11,7 +11,7 @@ Scene::~Scene()
 {
 	RemoveAllChildren();
 }
-
+ 
 
 void Scene::AddChild(DisplayObject * child, uint32_t layer_index, std::optional<uint32_t> order_index)
 {

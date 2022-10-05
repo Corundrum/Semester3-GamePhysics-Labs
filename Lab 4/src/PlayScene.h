@@ -6,6 +6,7 @@
 #include "Button.h"
 #include "Label.h"
 #include "Target.h"
+#include <vector>
 
 class PlayScene : public Scene
 {
@@ -27,13 +28,10 @@ private:
 	glm::vec2 m_mousePosition;
 
 	Target* m_pBall;
+	Target* m_pBall2;
+	Target* m_pBall3;
 
-	float m_angleDegrees = 0;
-	float m_speed = 500; // px/s
 	glm::vec2 m_startPosition = glm::vec2(100,300);
-	float m_gravity = 9.8;
-
-	bool BallLaunched = 0;
 
 	// Input Control
 	int m_pCurrentInputType{};
