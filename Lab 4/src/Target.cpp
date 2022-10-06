@@ -27,11 +27,6 @@ void Target::Draw()
 	TextureManager::Instance().Draw("ball", GetTransform()->position, 0, 255, true);
 }
 
-void Target::Update()
-{
-
-}
-
 void Target::Clean()
 {
 }

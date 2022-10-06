@@ -18,15 +18,6 @@ PlayScene::PlayScene()
 PlayScene::~PlayScene()
 = default;
 
-glm::vec2 AngleMagnitudeToVec2(float angle, float magnitude)
-{
-	return glm::vec2
-	(	
-		cos(-angle * Util::Deg2Rad) * magnitude, 
-		sin(-angle * Util::Deg2Rad) * magnitude
-	);
-}
-
 void PlayScene::Draw()
 {
 	DrawDisplayList();
@@ -64,23 +55,6 @@ void PlayScene::GetPlayerInput()
 
 void PlayScene::GetKeyboardInput()
 {
-	if (EventManager::Instance().KeyPressed(SDL_SCANCODE_SPACE))
-	{
-		m_pBall->GetTransform()->position = glm::vec2(100, 100);
-		m_pBall->GetRigidBody()->velocity = glm::vec2(0.0f, 0.0f);
-		m_pBall->GetRigidBody()->acceleration = glm::vec2(0.0f, 0.0f);
-
-		m_pBall2->GetTransform()->position = glm::vec2(200, 100);
-		m_pBall2->GetRigidBody()->velocity = glm::vec2(0.0f, 0.0f);
-		m_pBall2->GetRigidBody()->acceleration = glm::vec2(0.0f, 0.0f);
-
-
-		m_pBall3->GetTransform()->position = glm::vec2(300, 100);
-		m_pBall3->GetRigidBody()->velocity = glm::vec2(0.0f, 0.0f);
-		m_pBall3->GetRigidBody()->acceleration = glm::vec2(0.0f, 0.0f);
-
-
-	}
 
 	if (EventManager::Instance().IsKeyDown(SDL_SCANCODE_ESCAPE))
 	{
@@ -141,20 +115,26 @@ void PlayScene::GUI_Function()
 	ImGui::Separator;
 
 	ImGui::Text("Ball 1");
-	float grav_eff = m_pBall->getGravityEffect();
-	float damp_eff = m_pBall->getDampenEffect();
-	float speed = m_pBall->getSpeed();
-	float angle = m_pBall->getAngle();
-	ImGui::SliderFloat("Gravity Effect", &grav_eff, 0, 10);
-	ImGui::SliderFloat("Dampen Effect", &damp_eff, 0, 10);
-	ImGui::SliderFloat("Speed", &speed, 0, 100);
-	ImGui::SliderFloat("Angle", &angle, 0, 360);
-	m_pBall->setGravityEffect(grav_eff);
-	m_pBall->setDampenEffect(damp_eff);
-	m_pBall->setSpeed(speed);
-	m_pBall->setAngle(angle);
 	
+	ImGui::SliderFloat("Gravity Effect", &m_pBall->m_gravityEffect, 0, 10);
+	ImGui::SliderFloat("Dampen Effect", &m_pBall->m_dampenEffect, 0, 10);
+	ImGui::SliderFloat("Speed", &m_pBall->m_speed, 0, 100);
+	ImGui::SliderFloat("Angle", &m_pBall->m_angle, 0, 360);
 
+	ImGui::Text("Ball 2");
+
+	ImGui::SliderFloat("Gravity Effect 2", &m_pBall2->m_gravityEffect, 0, 10);
+	ImGui::SliderFloat("Dampen Effect 2", &m_pBall2->m_dampenEffect, 0, 10);
+	ImGui::SliderFloat("Speed 2", &m_pBall2->m_speed, 0, 100);
+	ImGui::SliderFloat("Angle 2", &m_pBall2->m_angle, 0, 360);
+	
+	ImGui::Text("Ball 3");
+
+	ImGui::SliderFloat("Gravity Effect 3", &m_pBall3->m_gravityEffect, 0, 10);
+	ImGui::SliderFloat("Dampen Effect 3", &m_pBall3->m_dampenEffect, 0, 10);
+	ImGui::SliderFloat("Speed 3", &m_pBall3->m_speed, 0, 100);
+	ImGui::SliderFloat("Angle 3", &m_pBall3->m_angle, 0, 360);
+	
 
 	ImGui::End();
 }

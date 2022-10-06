@@ -11,7 +11,6 @@ public:
 
 	// Inherited via GameObject
 	virtual void Draw() override;
-	virtual void Update();
 	virtual void Clean() override;
 
 private:

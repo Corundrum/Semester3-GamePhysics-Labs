@@ -10,6 +10,8 @@ public:
 	PhysicsObject();
 	virtual ~PhysicsObject();
 
+	glm::vec2 AngleMagnitudeToVec2(float angle, float magnitude);
+
 	float getGravityEffect();
 	float getDampenEffect();
 	float getSpeed();
@@ -25,11 +27,13 @@ public:
 	virtual void Update() override;
 	virtual void Clean() override = 0;
 
-private:
+
 	float m_gravityEffect;
 	float m_dampenEffect;
 	float m_speed;
 	float m_angle;
+private:
+	
 };
 
 

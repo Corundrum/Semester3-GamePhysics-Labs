@@ -1,5 +1,5 @@
 #include "PhysicsManager.h"
-
+#include "Util.h"
 #include <algorithm>
 
 PhysicsManager::PhysicsManager()
@@ -19,12 +19,11 @@ void PhysicsManager::RunPhysics()
 			if (!physics_object->IsEnabled())
 			{
 				break;
-			}
-
+			}			
 			//gravity
 			physics_object->GetRigidBody()->velocity.y += getGravity() * physics_object->getGravityEffect();
 			//drag
-			physics_object->GetRigidBody()->acceleration = ((physics_object->GetRigidBody()->velocity * physics_object->GetRigidBody()->velocity) * getDrag() * physics_object->getDampenEffect()) * (1.0f/60.0f);
+			physics_object->GetRigidBody()->acceleration = (physics_object->GetRigidBody()->velocity * getDrag() * physics_object->getDampenEffect());
 			//velocity
 			physics_object->GetRigidBody()->velocity += physics_object->GetRigidBody()->acceleration * (1.0f / 60.0f);
 			//moving
