@@ -17,17 +17,35 @@ PlayScene::PlayScene()
 PlayScene::~PlayScene()
 = default;
 
+glm::vec2 AngleMagnitudeToVec2(float angle, float magnitude)
+{
+	return glm::vec2
+	(
+		cos(-angle * Util::Deg2Rad) * magnitude,
+		sin(-angle * Util::Deg2Rad) * magnitude
+	);
+}
+
 void PlayScene::Draw()
 {
 	DrawDisplayList();
+
+	if (DrawHitbox)
+	{
+		Util::DrawCircle(m_pBall->GetTransform()->position, m_pBall->GetRigidBody()->radius, glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
+		Util::DrawCircle(m_pPlane->GetTransform()->position, m_pPlane->GetRigidBody()->radius, glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
+	}
 
 	SDL_SetRenderDrawColor(Renderer::Instance().GetRenderer(), 255, 255, 255, 255);
 }
 
 void PlayScene::Update()
 {
-	//PhysicsManager::Instance().RunPhysics();
-	physics.Update();
+	if (RunPhysics)
+	{
+		PhysicsEngine::Instance().Update();
+	}
+
 	UpdateDisplayList();
 	HandleEvents();
 
@@ -55,6 +73,15 @@ void PlayScene::GetPlayerInput()
 
 void PlayScene::GetKeyboardInput()
 {
+	if (EventManager::Instance().KeyPressed(SDL_SCANCODE_SPACE))
+	{
+		RunPhysics = !RunPhysics;
+	}
+
+	if (EventManager::Instance().KeyPressed(SDL_SCANCODE_LSHIFT))
+	{
+		DrawHitbox = !DrawHitbox;
+	}
 
 	if (EventManager::Instance().IsKeyDown(SDL_SCANCODE_ESCAPE))
 	{
@@ -79,7 +106,15 @@ void PlayScene::Start()
 
 	m_pBall = new Target;
 	AddChild(m_pBall);
-	physics.AddObject(m_pBall->GetRigidBody());
+	PhysicsEngine::Instance().AddObject(m_pBall->GetRigidBody());
+	m_pBall->GetRigidBody()->velocity = AngleMagnitudeToVec2(startAngle, startSpeed);
+
+
+	m_pPlane = new Plane;
+	AddChild(m_pPlane);
+	PhysicsEngine::Instance().AddObject(m_pPlane->GetRigidBody());
+	m_pPlane->GetTransform()->position = glm::vec2(600, 100);
+	m_pPlane->GetRigidBody()->velocity = AngleMagnitudeToVec2(180, startSpeed);
 
 
 

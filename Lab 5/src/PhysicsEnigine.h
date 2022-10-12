@@ -6,6 +6,12 @@ class RigidBody;
 class PhysicsEngine
 {
 public:
+	static PhysicsEngine& Instance()
+	{
+		static PhysicsEngine instance; // Magic statics.
+		return instance;
+	}
+
 	float fixedDeltatime = 1.0f / 60.0f;
 	glm::vec2 gravityAcceleration = glm::vec2(0, 981);
 

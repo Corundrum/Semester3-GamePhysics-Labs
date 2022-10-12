@@ -12,6 +12,6 @@ struct RigidBody
 	float gravityScale = 1.0f;
 	float damping = 0.98f;
 	bool isColliding = false;
-	float radius = 50.0f;
+	float radius = 30.0f;
 };
 #endif /* defined (__RIGID_BODY__) */

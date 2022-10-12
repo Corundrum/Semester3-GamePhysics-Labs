@@ -6,6 +6,7 @@
 #include "Button.h"
 #include "Label.h"
 #include "Target.h"
+#include "Plane.h"
 #include "PhysicsEnigine.h"
 #include <vector>
 
@@ -29,15 +30,21 @@ private:
 	glm::vec2 m_mousePosition;
 
 	Target* m_pBall;
+	Plane* m_pPlane;
 
 	glm::vec2 m_startPosition = glm::vec2(100,300);
+
+	float startAngle = 0.0f;
+	float startSpeed = 500.0f;
 
 	// Input Control
 	int m_pCurrentInputType{};
 	void GetPlayerInput();
 	void GetKeyboardInput();
 
-	PhysicsEngine physics;
+	bool DrawHitbox = false;
+	bool RunPhysics = false;
+
 };
 
 #endif /* defined (__PLAY_SCENE__) */

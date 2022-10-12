@@ -1,51 +1,58 @@
 #include "PhysicsEnigine.h"
 #include "RigidBody.h"
 #include "GameObject.h"
+#include <iostream>
 
 void PhysicsEngine::AddObject(RigidBody* rigidBody)
 {
 	physicsObject.push_back(rigidBody);
 }
 
+bool CheckCollision(RigidBody* pos1, RigidBody* pos2)
+{
+	if (
+		pow(pos2->gameObject->GetTransform()->position.x - pos1->gameObject->GetTransform()->position.x, 2)
+		+ pow(pos2->gameObject->GetTransform()->position.y - pos1->gameObject->GetTransform()->position.y, 2)
+		<= pow(pos2->radius + pos1->radius, 2)
+		)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
 void PhysicsEngine::Update()
 {
-
-	for each (RigidBody * rb in physicsObject)
+	//it = iterator
+	for (auto it = physicsObject.begin(); it != physicsObject.end(); it++)
 	{
+		//deference to access the element
+		RigidBody* rb(*it);
+
 		//apply acceleration to velocity
 		rb->velocity += gravityAcceleration * rb->gravityScale * fixedDeltatime;
 		//apply friction
 		rb->velocity *= rb->damping;
 		//apply velocity
 		rb->gameObject->GetTransform()->position += rb->velocity * fixedDeltatime;
-	}
-/*
-	for (int i = 0; i < 3; i++)
-	{
-		for (int j = i + 1; j < 3; j++)
-		{
-			Check(i, j);
-		}
-	}
 
-	
-
-	for (auto it = physicsObject.begin(); it != physicsObject.end(); it++)
-	{
-		//deference to access the element
-		RigidBody* rb(*it);
-
+		//collision loop
+		//set it2 to the iterator
 		auto it2 = it;
+		//set it2 to the next in line along the list
 		it2++;
 		for (; it2 != physicsObject.end(); it2++)
 		{
 			RigidBody* rb2 = (*it2);
 
-			if (colliding(rb, rb2))
+			if (CheckCollision(rb, rb2))
 			{
-				print;
+				std::cout << "Colliding";
 			}
 		}
 	}
-	*/
+	
 }
