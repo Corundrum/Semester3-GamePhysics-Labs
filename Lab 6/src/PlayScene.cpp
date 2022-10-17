@@ -17,6 +17,11 @@ PlayScene::PlayScene()
 PlayScene::~PlayScene()
 = default;
 
+float Vec2ToAngle(glm::vec2 vector)
+{
+	return atan2(vector.y, vector.x) * (180/3.14159);
+}
+
 void PlayScene::Draw()
 {
 	DrawDisplayList();
@@ -24,7 +29,9 @@ void PlayScene::Draw()
 	if (DrawHitbox)
 	{
 		Util::DrawCircle(m_pBall->GetTransform()->position, m_pBall->GetRigidBody()->radius, glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
-		Util::DrawCircle(m_pPlane->GetTransform()->position, m_pPlane->GetRigidBody()->radius, glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
+		Util::DrawCircle(m_pBall2->GetTransform()->position, m_pBall2->GetRigidBody()->radius, glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
+		Util::DrawLine(m_pBall->GetTransform()->position, m_pBall->GetTransform()->position + m_pBall->GetRigidBody()->velocity * 1000.0f, glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
+		Util::DrawLine(m_pHalfplane->GetTransform()->position, m_pHalfplane->GetTransform()->position + ballTajectory * 1000.0f, glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
 	}
 
 	SDL_SetRenderDrawColor(Renderer::Instance().GetRenderer(), 255, 255, 255, 255);
@@ -39,7 +46,6 @@ void PlayScene::Update()
 
 	UpdateDisplayList();
 	HandleEvents();
-
 }
 
 void PlayScene::Clean()
@@ -69,6 +75,16 @@ void PlayScene::GetKeyboardInput()
 		RunPhysics = !RunPhysics;
 	}
 
+	if (EventManager::Instance().KeyPressed(SDL_SCANCODE_R))
+	{
+		m_pBall->GetTransform()->position = glm::vec2(100, 100);
+		m_pBall->GetRigidBody()->velocity = Util::AngleMagnitudeToVec2(startAngle, startSpeed);
+
+		m_pBall2->GetTransform()->position = glm::vec2(400, 100);
+		m_pBall2->GetRigidBody()->velocity = Util::AngleMagnitudeToVec2(startAngle, -startSpeed);
+
+	}
+
 	if (EventManager::Instance().KeyPressed(SDL_SCANCODE_LSHIFT))
 	{
 		DrawHitbox = !DrawHitbox;
@@ -95,23 +111,27 @@ void PlayScene::Start()
 	// Set GUI Title
 	m_guiTitle = "Play Scene";
 
+	/*------- HalfPlane -------*/
 	m_pHalfplane = new HalfPlane();
 	AddChild(m_pHalfplane);
 	m_pHalfplane->GetRigidBody()->gravityScale = 0.0f;
-	PhysicsEngine::Instance().AddObject(m_pHalfplane->GetRigidBody());
-	m_pHalfplane->GetTransform()->position = glm::vec2(400, 550);
-
+	PhysicsEngine::Instance().AddPlaneObject(m_pHalfplane);
+	m_pHalfplane->GetTransform()->position = glm::vec2(400, 100);
+	
+	/*------- Ball -------*/
 	m_pBall = new Target;
 	AddChild(m_pBall);
-	PhysicsEngine::Instance().AddObject(m_pBall->GetRigidBody());
+	PhysicsEngine::Instance().AddPhysicsObject(m_pBall->GetRigidBody());
 	m_pBall->GetRigidBody()->velocity = Util::AngleMagnitudeToVec2(startAngle, startSpeed);
+	//m_pBall->GetRigidBody()->gravityScale = 0.0f;
+	//m_pBall->GetRigidBody()->damping = 1.0f;
 
-
-	m_pPlane = new Plane;
-	AddChild(m_pPlane);
-	PhysicsEngine::Instance().AddObject(m_pPlane->GetRigidBody());
-	m_pPlane->GetTransform()->position = glm::vec2(600, 100);
-	m_pPlane->GetRigidBody()->velocity = Util::AngleMagnitudeToVec2(180, startSpeed);
+	/*------- Ball 2 -------*/
+	m_pBall2 = new Target;
+	AddChild(m_pBall2);
+	PhysicsEngine::Instance().AddPhysicsObject(m_pBall2->GetRigidBody());
+	m_pBall2->GetTransform()->position = glm::vec2(600, 100);
+	m_pBall2->GetRigidBody()->velocity = Util::AngleMagnitudeToVec2(180, startSpeed);
 
 
 
@@ -133,9 +153,11 @@ void PlayScene::GUI_Function()
 	
 	ImGui::SliderFloat2("HalfPlane Position", &m_pHalfplane->GetTransform()->position.x, 0, 800);
 	
+	ImGui::SliderFloat("Angle", &startAngle, 0, 360);
+
 	if (ImGui::SliderFloat("HalfPlane Orientation", &m_halfPlaneOrientation, 0, 360))
 	{
-		m_pHalfplane->SetOrientation(m_halfPlaneOrientation);
+		m_pHalfplane->SetNormalAngle(m_halfPlaneOrientation);
 		//m_pHalfplane->m_normal = AngleMagnitudeToVec2(m_halfPlaneOrientation, 1.0f);
 	}
 

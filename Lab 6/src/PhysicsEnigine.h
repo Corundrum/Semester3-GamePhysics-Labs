@@ -2,6 +2,7 @@
 #include <list>
 #include "glm/vec2.hpp"
 class RigidBody;
+class HalfPlane;
 
 class PhysicsEngine
 {
@@ -16,10 +17,12 @@ public:
 	glm::vec2 gravityAcceleration = glm::vec2(0, 981);
 
 public:
-	void AddObject(RigidBody* rigidBody);
+	void AddPhysicsObject(RigidBody* rigidBody);
+	void AddPlaneObject(HalfPlane* halfplane);
 	void Update();
 
 private:
 	std::list<RigidBody*> physicsObject;
+	std::list<HalfPlane*> physicsPlanes;
 
 }; 

@@ -14,7 +14,8 @@ Target::Target()
 	GetRigidBody()->velocity = glm::vec2(0, 0);
 	GetRigidBody()->isColliding = false;
 
-	SetType(GameObjectType::TARGET);
+	GetRigidBody()->radius = 30.0f;
+	SetType(GameObjectType::CIRCLE);
 }
 
 Target::~Target()

@@ -6,7 +6,6 @@
 #include "Button.h"
 #include "Label.h"
 #include "Target.h"
-#include "Plane.h"
 #include "PhysicsEnigine.h"
 #include "HalfPlane.h"
 
@@ -30,11 +29,13 @@ private:
 	glm::vec2 m_mousePosition;
 
 	Target* m_pBall;
-	Plane* m_pPlane;
+	Target* m_pBall2;
 
 	HalfPlane* m_pHalfplane;
 
 	float m_halfPlaneOrientation = 90.0f;
+
+	glm::vec2 ballTajectory;
 
 	glm::vec2 m_startPosition = glm::vec2(100,300);
 	float startAngle = 0.0f;
