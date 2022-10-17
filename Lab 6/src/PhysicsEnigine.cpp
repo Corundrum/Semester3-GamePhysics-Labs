@@ -23,9 +23,9 @@ bool CircleCircleCheck(RigidBody* pos1, RigidBody* pos2)
 		<= pow(pos2->radius + pos1->radius, 2)
 		)
 	{
-		//glm::vec2 tempVel = pos1->velocity;
-		pos1->velocity *= -1;
-		pos2->velocity *= -1;
+		glm::vec2 tempVel = pos1->velocity;
+		pos1->velocity = pos2->velocity;
+		pos2->velocity = tempVel;
 		return true;
 	}
 	return false;
