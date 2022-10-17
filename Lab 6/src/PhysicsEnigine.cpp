@@ -17,12 +17,20 @@ void PhysicsEngine::AddPlaneObject(HalfPlane* halfplane)
 
 bool CircleCircleCheck(RigidBody* pos1, RigidBody* pos2)
 {
-	if (
-		pow(pos2->gameObject->GetTransform()->position.x - pos1->gameObject->GetTransform()->position.x, 2)
-		+ pow(pos2->gameObject->GetTransform()->position.y - pos1->gameObject->GetTransform()->position.y, 2)
-		<= pow(pos2->radius + pos1->radius, 2)
-		)
+	float center_distance = pow(pos2->gameObject->GetTransform()->position.x - pos1->gameObject->GetTransform()->position.x, 2)
+		+ pow(pos2->gameObject->GetTransform()->position.y - pos1->gameObject->GetTransform()->position.y, 2);
+
+	float radius_combined = pow(pos2->radius + pos1->radius, 2);
+
+	if (center_distance <= radius_combined)
 	{
+		float actual_distance = sqrt(center_distance) - sqrt(radius_combined);
+		glm::vec2 angleVec = Util::Normalize(glm::vec2(pos2->gameObject->GetTransform()->position.x - pos1->gameObject->GetTransform()->position.x, pos2->gameObject->GetTransform()->position.y - pos1->gameObject->GetTransform()->position.y));
+		//std::cout << angleVec.x << ", " << angleVec.y << std::endl;
+
+		pos1->gameObject->GetTransform()->position += angleVec * actual_distance;
+		pos2->gameObject->GetTransform()->position -= angleVec * actual_distance;
+
 		glm::vec2 tempVel = pos1->velocity;
 		pos1->velocity = pos2->velocity;
 		pos2->velocity = tempVel;
