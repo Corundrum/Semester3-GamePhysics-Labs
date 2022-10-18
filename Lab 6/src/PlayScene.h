@@ -33,12 +33,11 @@ private:
 
 	HalfPlane* m_pHalfplane;
 
-	float m_halfPlaneOrientation = 90.0f;
+	float m_halfPlaneOrientation = 270.0f;
 
 	glm::vec2 ballTajectory;
 
-	glm::vec2 m_startPosition = glm::vec2(100,300);
-	float startAngle = 0.0f;
+	float startAngle = 315.0f;
 	float startSpeed = 500.0f;
 
 	// Input Control

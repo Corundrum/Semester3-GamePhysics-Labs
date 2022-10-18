@@ -16,7 +16,7 @@ void HalfPlane::Draw()
 	Util::DrawLine(start, end);
 
 	//draw plane line
-	Util::DrawLine(start - m_planeVector, start + m_planeVector, glm::vec4(0.6f, 0.0f, 0.35f, 1.0f));
+	Util::DrawLine(start - (m_planeVector * 10000.0f), start + (m_planeVector * 10000.0f), glm::vec4(0.6f, 0.0f, 0.35f, 1.0f));
 }
 
 void HalfPlane::Update()
@@ -37,7 +37,7 @@ void HalfPlane::SetNormalAngle(float angle)
 void HalfPlane::SetPlaneAngle()
 {
 	m_planeAngle = m_normalAngle + 90;
-	m_planeVector = Util::AngleMagnitudeToVec2(m_planeAngle, 10000.0f);
+	m_planeVector = Util::AngleMagnitudeToVec2(m_planeAngle, 1.0f);
 }
 
 float HalfPlane::GetNormalAngle()

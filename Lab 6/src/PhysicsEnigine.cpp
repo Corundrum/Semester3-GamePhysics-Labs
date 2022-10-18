@@ -15,6 +15,18 @@ void PhysicsEngine::AddPlaneObject(HalfPlane* halfplane)
 	physicsPlanes.push_back(halfplane);
 }
 
+float Vec2ToAngle(glm::vec2 vector)
+{
+	float angle = atan2(-vector.y, vector.x) * (180 / 3.14159);
+	
+	if (angle < 0)
+	{
+		angle += 360;
+	}
+
+	return angle;
+}
+
 bool CircleCircleCheck(RigidBody* pos1, RigidBody* pos2)
 {
 	float center_distance = pow(pos2->gameObject->GetTransform()->position.x - pos1->gameObject->GetTransform()->position.x, 2)
@@ -48,13 +60,25 @@ bool CircleHalfPlaneCheck(RigidBody* circle, HalfPlane* half_plane)
 	float circle_distance_from_line = ((relative_position.x * half_plane->GetNormalVector().x) +
 										(relative_position.y * half_plane->GetNormalVector().y)) - circle->radius;
 
-	//trajectory of circle after colliding with half plane
-	glm::vec2 ballTrajectory = Util::Normalize(circle->gameObject->GetRigidBody()->velocity) + half_plane->GetNormalVector();
 
 	if (circle_distance_from_line < 0)
 	{
+		float oppositeDir = Vec2ToAngle(-circle->velocity);
+
+		//std::cout << "Surface Normal Angle: " << half_plane->GetNormalAngle() << std::endl;
+		//std::cout << "Opposite Angle: " << oppositeDir << std::endl;
+
+		float angleDiff = half_plane->GetNormalAngle() - oppositeDir;
+		//std::cout << "Angle Difference: " << angleDiff << std::endl;
+
+		float newAngle = half_plane->GetNormalAngle() + angleDiff;
+		//std::cout << "New Angle: " << newAngle << std::endl;
+
+		float speed = sqrt(pow(circle->velocity.x, 2) + pow(circle->velocity.y, 2));
+		//std::cout << "Speed: " << speed << std::endl;
+
 		circle->gameObject->GetTransform()->position -= half_plane->GetNormalVector() * circle_distance_from_line;
-		circle->velocity *= ballTrajectory;
+		circle->velocity = Util::AngleMagnitudeToVec2(newAngle, speed);
 
 		return true;
 	}

@@ -292,8 +292,8 @@ glm::vec2 Util::AngleMagnitudeToVec2(float angle, float magnitude)
 {
 	return glm::vec2
 	(
-		cos(-angle * Util::Deg2Rad) * magnitude,
-		sin(angle * Util::Deg2Rad) * magnitude
+		cos(angle * Util::Deg2Rad) * magnitude,
+		sin(-angle * Util::Deg2Rad) * magnitude
 	);
 }
 

@@ -17,14 +17,14 @@ PlayScene::PlayScene()
 PlayScene::~PlayScene()
 = default;
 
-float Vec2ToAngle(glm::vec2 vector)
-{
-	return atan2(vector.y, vector.x) * (180/3.14159);
-}
-
 void PlayScene::Draw()
 {
 	DrawDisplayList();
+
+	glm::vec2 opposite_angle = m_pHalfplane->GetNormalVector() + m_pHalfplane->GetPlaneVector();
+
+	 ballTajectory = Util::Normalize(m_pBall->GetRigidBody()->velocity) * opposite_angle;
+
 
 	if (DrawHitbox)
 	{
@@ -80,7 +80,7 @@ void PlayScene::GetKeyboardInput()
 		m_pBall->GetTransform()->position = glm::vec2(100, 100);
 		m_pBall->GetRigidBody()->velocity = Util::AngleMagnitudeToVec2(startAngle, startSpeed);
 
-		m_pBall2->GetTransform()->position = glm::vec2(400, 100);
+		m_pBall2->GetTransform()->position = glm::vec2(600, 100);
 		m_pBall2->GetRigidBody()->velocity = Util::AngleMagnitudeToVec2(startAngle, -startSpeed);
 
 	}
@@ -116,7 +116,7 @@ void PlayScene::Start()
 	AddChild(m_pHalfplane);
 	m_pHalfplane->GetRigidBody()->gravityScale = 0.0f;
 	PhysicsEngine::Instance().AddPlaneObject(m_pHalfplane);
-	m_pHalfplane->GetTransform()->position = glm::vec2(400, 100);
+	m_pHalfplane->GetTransform()->position = glm::vec2(400, 500);
 	
 	/*------- Ball -------*/
 	m_pBall = new Target;
