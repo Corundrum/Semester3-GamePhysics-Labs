@@ -21,8 +21,35 @@ void PlayScene::Draw()
 {
 	DrawDisplayList();
 
+	auto GravityVector = PhysicsEngine::Instance().gravityAcceleration;
+	auto PlaneNormalVector = m_pHalfplane->GetNormalVector();
+	auto BallPosition = m_pBall->GetTransform()->position;
+
+	//Force of Gravity
+	glm::vec2 ForceGravity = m_pBall->GetRigidBody()->mass * GravityVector;
+
+	//Force of Normal
+	float dotProduct_GravityPlaneNormal = ((ForceGravity.x * PlaneNormalVector.x) + (ForceGravity.y * PlaneNormalVector.y));
+	glm::vec2 Perpendicular = dotProduct_GravityPlaneNormal * PlaneNormalVector;
+	glm::vec2 ForceNormal = -Perpendicular;
+	
+	//Force of Friction
+	glm::vec2 Parallel = ForceGravity - Perpendicular;
+	glm::vec2 ForceFriction = -Parallel;
+
+
+
 	//Gravity Line
-	Util::DrawLine(m_pBall->GetTransform()->position, m_pBall->GetTransform()->position + PhysicsEngine::Instance().gravityAcceleration * 8.0f, glm::vec4(0.5f, 0.0f, 0.7f, 1.0f));
+	Util::DrawLine(BallPosition, BallPosition + ForceGravity, glm::vec4(0.5f, 0.0f, 0.7f, 1.0f));
+	m_pFGravity->GetTransform()->position = BallPosition + ForceGravity;
+
+	//Normal Line
+	Util::DrawLine(BallPosition, BallPosition + ForceNormal, glm::vec4(0.0f, 0.5f, 0.0f, 1.0f));
+	m_pFNormal->GetTransform()->position = BallPosition + ForceNormal;
+
+	//Friction Line
+	Util::DrawLine(BallPosition, BallPosition + ForceFriction, glm::vec4(0.6f, 0.4f, 0.0f, 1.0f));
+	m_pFFriction->GetTransform()->position = BallPosition + ForceFriction;
 
 	SDL_SetRenderDrawColor(Renderer::Instance().GetRenderer(), 255, 255, 255, 255);
 }
@@ -33,6 +60,7 @@ void PlayScene::Update()
 	{
 		PhysicsEngine::Instance().Update();
 	}
+
 
 	UpdateDisplayList();
 	HandleEvents();
@@ -108,7 +136,17 @@ void PlayScene::Start()
 	m_pBall->GetRigidBody()->velocity = Util::AngleMagnitudeToVec2(startAngle, startSpeed);
 	
 
+	m_pFGravity = new Label("Force of Gravity", "Consolas", 10, SDL_Color{ 64, 0, 100, 255 });
+	m_pFGravity->SetParent(this);
+	AddChild(m_pFGravity);
 
+	m_pFNormal = new Label("Force of Normal", "Consolas", 10, SDL_Color{ 0, 80, 0, 255 });
+	m_pFNormal->SetParent(this);
+	AddChild(m_pFNormal);
+
+	m_pFFriction = new Label("Force of Friction", "Consolas", 10, SDL_Color{ 80, 60, 0, 255 });
+	m_pFFriction->SetParent(this);
+	AddChild(m_pFFriction);
 
 	/* DO NOT REMOVE */
 	ImGuiWindowFrame::Instance().SetGuiFunction([this] { GUI_Function(); });
@@ -128,7 +166,7 @@ void PlayScene::GUI_Function()
 	
 	ImGui::SliderFloat2("HalfPlane Position", &m_pHalfplane->GetTransform()->position.x, 0, 800);
 
-	if (ImGui::SliderFloat("HalfPlane Orientation", &m_halfPlaneOrientation, 0, 360))
+	if (ImGui::SliderFloat("HalfPlane Orientation", &m_halfPlaneOrientation, 0, 180))
 	{
 		m_pHalfplane->SetNormalAngle(m_halfPlaneOrientation);
 		//m_pHalfplane->m_normal = AngleMagnitudeToVec2(m_halfPlaneOrientation, 1.0f);

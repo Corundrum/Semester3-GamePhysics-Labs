@@ -46,6 +46,11 @@ private:
 
 	bool RunPhysics = true;
 
+
+	//Labels
+	Label* m_pFGravity{};
+	Label* m_pFNormal{};
+	Label* m_pFFriction{};
 };
 
 #endif /* defined (__PLAY_SCENE__) */

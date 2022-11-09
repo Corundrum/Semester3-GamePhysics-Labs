@@ -56,7 +56,7 @@ bool CircleHalfPlaneCheck(RigidBody* circle, HalfPlane* half_plane)
 	//Position of circle relative to the line origin
 	glm::vec2 relative_position = circle->gameObject->GetTransform()->position - half_plane->GetTransform()->position;
 
-	//distance from line to ball
+	//distance from line to ball -- Dot Product
 	float circle_distance_from_line = ((relative_position.x * half_plane->GetNormalVector().x) +
 										(relative_position.y * half_plane->GetNormalVector().y)) - circle->radius;
 

@@ -10,9 +10,10 @@ Target::Target()
 	const auto size = TextureManager::Instance().GetTextureSize("ball");
 	SetWidth(static_cast<int>(size.x));
 	SetHeight(static_cast<int>(size.y));
+	
 	GetTransform()->position = glm::vec2(100.0f, 100.0f);
-	GetRigidBody()->velocity = glm::vec2(0, 0);
-	GetRigidBody()->isColliding = false;
+
+	GetRigidBody()->mass = 8.0f;//kg
 
 	GetRigidBody()->radius = 30.0f;
 	SetType(GameObjectType::CIRCLE);

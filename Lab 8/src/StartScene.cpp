@@ -45,12 +45,11 @@ void StartScene::HandleEvents()
 
 void StartScene::Start()
 {
-	const SDL_Color blue = { 0, 0, 255, 255 };
-	m_pStartLabel = new Label("Simon Sereda", "Consolas", 80, blue, glm::vec2(400.0f, 40.0f));
+	m_pStartLabel = new Label("Simon Sereda", "Consolas", 80, SDL_Color{0, 0, 255, 255}, glm::vec2(400.0f, 40.0f));
 	m_pStartLabel->SetParent(this);
 	AddChild(m_pStartLabel);
 
-	m_pInstructionsLabel = new Label("101377452", "Consolas", 40, blue, glm::vec2(400.0f, 120.0f));
+	m_pInstructionsLabel = new Label("101377452", "Consolas", 40, SDL_Color{ 0, 0, 255, 255 }, glm::vec2(400.0f, 120.0f));
 	m_pInstructionsLabel->SetParent(this);
 	AddChild(m_pInstructionsLabel);
 
