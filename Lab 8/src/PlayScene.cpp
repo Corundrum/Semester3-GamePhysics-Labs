@@ -21,6 +21,9 @@ void PlayScene::Draw()
 {
 	DrawDisplayList();
 
+	//Gravity Line
+	Util::DrawLine(m_pBall->GetTransform()->position, m_pBall->GetTransform()->position + PhysicsEngine::Instance().gravityAcceleration * 8.0f, glm::vec4(0.5f, 0.0f, 0.7f, 1.0f));
+
 	SDL_SetRenderDrawColor(Renderer::Instance().GetRenderer(), 255, 255, 255, 255);
 }
 
@@ -124,14 +127,20 @@ void PlayScene::GUI_Function()
 	ImGui::Separator;
 	
 	ImGui::SliderFloat2("HalfPlane Position", &m_pHalfplane->GetTransform()->position.x, 0, 800);
-	
-	ImGui::SliderFloat("Angle", &startAngle, 0, 360);
 
 	if (ImGui::SliderFloat("HalfPlane Orientation", &m_halfPlaneOrientation, 0, 360))
 	{
 		m_pHalfplane->SetNormalAngle(m_halfPlaneOrientation);
 		//m_pHalfplane->m_normal = AngleMagnitudeToVec2(m_halfPlaneOrientation, 1.0f);
 	}
+
+	float gravity = PhysicsEngine::Instance().gravityAcceleration.y;
+
+	if (ImGui::SliderFloat("Gravity", &gravity, 0.0f, 50.0f))
+	{
+		PhysicsEngine::Instance().gravityAcceleration.y = gravity;
+	}
+
 
 
 	ImGui::Separator;

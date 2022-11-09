@@ -22,7 +22,7 @@ private:
 	glm::vec2 m_planeVector;
 	float m_planeAngle;
 	float m_normalAngle = 90.0f;
-	const float NORMAL_RENDER_SCALE = 100.0f;
+	const float NORMAL_RENDER_SCALE = 0.0f;
 
 };
 

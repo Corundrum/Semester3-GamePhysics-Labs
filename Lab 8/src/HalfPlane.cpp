@@ -16,7 +16,7 @@ void HalfPlane::Draw()
 	Util::DrawLine(start, end);
 
 	//draw plane line
-	Util::DrawLine(start - (m_planeVector * 10000.0f), start + (m_planeVector * 10000.0f), glm::vec4(0.6f, 0.0f, 0.35f, 1.0f));
+	Util::DrawLine(start - (m_planeVector * 10000.0f), start + (m_planeVector * 10000.0f), glm::vec4(0.0f, 0.5f, 0.0f, 1.0f));
 }
 
 void HalfPlane::Update()

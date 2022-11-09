@@ -24,7 +24,7 @@ Target::~Target()
 void Target::Draw()
 {
 	// draw the target
-	Util::DrawCircle(GetTransform()->position, GetRigidBody()->radius, glm::vec4(0.0f, 0.0f, 0.7f, 1.0f));
+	Util::DrawCircle(GetTransform()->position, GetRigidBody()->radius, glm::vec4(0.5f, 0.0f, 0.0f, 1.0f));
 	//TextureManager::Instance().Draw("ball", GetTransform()->position, 0, 255, true);
 }
 
