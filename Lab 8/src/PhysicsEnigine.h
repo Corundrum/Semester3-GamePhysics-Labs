@@ -14,7 +14,7 @@ public:
 	}
 
 	float fixedDeltatime = 1.0f / 60.0f;
-	glm::vec2 gravityAcceleration = glm::vec2(0, 981);
+	glm::vec2 gravityAcceleration = glm::vec2(0, 9.81);
 
 public:
 	void AddPhysicsObject(RigidBody* rigidBody);

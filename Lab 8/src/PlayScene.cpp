@@ -21,19 +21,6 @@ void PlayScene::Draw()
 {
 	DrawDisplayList();
 
-	glm::vec2 opposite_angle = m_pHalfplane->GetNormalVector() + m_pHalfplane->GetPlaneVector();
-
-	 ballTajectory = Util::Normalize(m_pBall->GetRigidBody()->velocity) * opposite_angle;
-
-
-	if (DrawHitbox)
-	{
-		Util::DrawCircle(m_pBall->GetTransform()->position, m_pBall->GetRigidBody()->radius, glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
-		Util::DrawCircle(m_pBall2->GetTransform()->position, m_pBall2->GetRigidBody()->radius, glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
-		Util::DrawLine(m_pBall->GetTransform()->position, m_pBall->GetTransform()->position + m_pBall->GetRigidBody()->velocity * 1000.0f, glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
-		Util::DrawLine(m_pHalfplane->GetTransform()->position, m_pHalfplane->GetTransform()->position + ballTajectory * 1000.0f, glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
-	}
-
 	SDL_SetRenderDrawColor(Renderer::Instance().GetRenderer(), 255, 255, 255, 255);
 }
 
@@ -80,15 +67,8 @@ void PlayScene::GetKeyboardInput()
 		m_pBall->GetTransform()->position = glm::vec2(100, 100);
 		m_pBall->GetRigidBody()->velocity = Util::AngleMagnitudeToVec2(startAngle, startSpeed);
 
-		m_pBall2->GetTransform()->position = glm::vec2(600, 100);
-		m_pBall2->GetRigidBody()->velocity = Util::AngleMagnitudeToVec2(startAngle, -startSpeed);
-
 	}
 
-	if (EventManager::Instance().KeyPressed(SDL_SCANCODE_LSHIFT))
-	{
-		DrawHitbox = !DrawHitbox;
-	}
 
 	if (EventManager::Instance().IsKeyDown(SDL_SCANCODE_ESCAPE))
 	{
@@ -123,15 +103,7 @@ void PlayScene::Start()
 	AddChild(m_pBall);
 	PhysicsEngine::Instance().AddPhysicsObject(m_pBall->GetRigidBody());
 	m_pBall->GetRigidBody()->velocity = Util::AngleMagnitudeToVec2(startAngle, startSpeed);
-	//m_pBall->GetRigidBody()->gravityScale = 0.0f;
-	//m_pBall->GetRigidBody()->damping = 1.0f;
-
-	/*------- Ball 2 -------*/
-	m_pBall2 = new Target;
-	AddChild(m_pBall2);
-	PhysicsEngine::Instance().AddPhysicsObject(m_pBall2->GetRigidBody());
-	m_pBall2->GetTransform()->position = glm::vec2(600, 100);
-	m_pBall2->GetRigidBody()->velocity = Util::AngleMagnitudeToVec2(180, startSpeed);
+	
 
 
 

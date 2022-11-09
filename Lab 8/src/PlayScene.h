@@ -29,7 +29,6 @@ private:
 	glm::vec2 m_mousePosition;
 
 	Target* m_pBall;
-	Target* m_pBall2;
 
 	HalfPlane* m_pHalfplane;
 
@@ -45,8 +44,7 @@ private:
 	void GetPlayerInput();
 	void GetKeyboardInput();
 
-	bool DrawHitbox = false;
-	bool RunPhysics = false;
+	bool RunPhysics = true;
 
 };
 

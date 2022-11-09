@@ -1,7 +1,7 @@
 #include "Target.h"
 #include "TextureManager.h"
 #include "Game.h"
-
+#include "Util.h"
 
 Target::Target()
 {
@@ -24,7 +24,8 @@ Target::~Target()
 void Target::Draw()
 {
 	// draw the target
-	TextureManager::Instance().Draw("ball", GetTransform()->position, 0, 255, true);
+	Util::DrawCircle(GetTransform()->position, GetRigidBody()->radius, glm::vec4(0.0f, 0.0f, 0.7f, 1.0f));
+	//TextureManager::Instance().Draw("ball", GetTransform()->position, 0, 255, true);
 }
 
 void Target::Update()

@@ -64,18 +64,12 @@ bool CircleHalfPlaneCheck(RigidBody* circle, HalfPlane* half_plane)
 	if (circle_distance_from_line < 0)
 	{
 		float oppositeDir = Vec2ToAngle(-circle->velocity);
-
-		//std::cout << "Surface Normal Angle: " << half_plane->GetNormalAngle() << std::endl;
-		//std::cout << "Opposite Angle: " << oppositeDir << std::endl;
-
+		
 		float angleDiff = half_plane->GetNormalAngle() - oppositeDir;
-		//std::cout << "Angle Difference: " << angleDiff << std::endl;
 
 		float newAngle = half_plane->GetNormalAngle() + angleDiff;
-		//std::cout << "New Angle: " << newAngle << std::endl;
-
+	
 		float speed = sqrt(pow(circle->velocity.x, 2) + pow(circle->velocity.y, 2));
-		//std::cout << "Speed: " << speed << std::endl;
 
 		circle->gameObject->GetTransform()->position -= half_plane->GetNormalVector() * circle_distance_from_line;
 		circle->velocity = Util::AngleMagnitudeToVec2(newAngle, speed);
@@ -87,42 +81,24 @@ bool CircleHalfPlaneCheck(RigidBody* circle, HalfPlane* half_plane)
 
 void PhysicsEngine::Update()
 {
-	//it = iterator
+
+	//Physics
 	for (auto it = physicsObject.begin(); it != physicsObject.end(); it++)
 	{
 		//deference to access the element
 		RigidBody* rb(*it);
 
-		//apply acceleration to velocity
-		rb->velocity += gravityAcceleration * rb->gravityScale * fixedDeltatime;
-		//apply friction
-		rb->velocity *= rb->damping;
-		//apply velocity
-		rb->gameObject->GetTransform()->position += rb->velocity * fixedDeltatime;
+		//apply acceleration, damping and position
+		//rb->velocity += gravityAcceleration * rb->gravityScale;
+		//rb->velocity *= rb->damping;
+		//rb->gameObject->GetTransform()->position += rb->velocity * fixedDeltatime;
 
-		//collision loop
-		//set it2 to the iterator
-		auto it2 = it;
-		//set it2 to the next in line along the list
-		it2++;
-		for (; it2 != physicsObject.end(); it2++)
-		{
-			RigidBody* rb2 = (*it2);
-			if (CircleCircleCheck(rb, rb2))
-			{
-				std::cout << "Circle Circle Collision." << std::endl;
-			}
-		}
 		for (auto it3 = physicsPlanes.begin(); it3 != physicsPlanes.end(); it3++)
 		{
 			HalfPlane* hp = (*it3);
-			if (CircleHalfPlaneCheck(rb, hp))
-			{
-				std::cout << "Circle Halfplane Collision." << std::endl;
-			}
+
+			rb->gameObject->GetTransform()->position = hp->GetTransform()->position;
+			CircleHalfPlaneCheck(rb, hp);
 		}
 	}
-
-	//std::cout << "Size: " << physicsObject.size() << std::endl;
-	
 }
