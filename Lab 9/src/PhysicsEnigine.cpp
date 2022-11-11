@@ -23,8 +23,10 @@ bool PhysicsEngine::CircleCircleCheck(CollisionCircle* circle1, CollisionCircle*
 	float sum_radius = circle1->GetRadius() + circle2->GetRadius();
 
 	if (distance <= sum_radius)
+	{
+		std::cout << circle1->GetRigidBody()->name << " collided with " << circle2->GetRigidBody()->name << std::endl;
 		return true;
-
+	}
 	return false;
 }
 
@@ -32,7 +34,7 @@ bool PhysicsEngine::CircleHalfPlaneCheck(CollisionCircle* circle, CollisionHalfP
 {
 	glm::vec2 relative_position = circle->GetTransform()->position - half_plane->GetTransform()->position;
 	float distance = Util::Dot(relative_position, half_plane->GetNormalVector()) - circle->GetRadius();
-	
+
 	//Stopping the Ball
 	if (distance <= 0)
 	{
@@ -43,7 +45,7 @@ bool PhysicsEngine::CircleHalfPlaneCheck(CollisionCircle* circle, CollisionHalfP
 		circle->GetRigidBody()->netForce += FNormal;
 		
 		//Friction V1
-		float gravDotnormal = Util::Dot(FGravity, half_plane->GetNormalVector());
+		/*float gravDotnormal = Util::Dot(FGravity, half_plane->GetNormalVector());
 		glm::vec2 perpendicular = gravDotnormal * half_plane->GetNormalVector();
 		glm::vec2 parallel = FGravity - perpendicular;
 
@@ -60,21 +62,18 @@ bool PhysicsEngine::CircleHalfPlaneCheck(CollisionCircle* circle, CollisionHalfP
 
 		glm::vec2 FFriction = FrictionMagnitude * frictionDirection;
 
-		circle->GetRigidBody()->netForce += FFriction;
-
-
-
+		circle->GetRigidBody()->netForce += FFriction;*/
 
 		//Friction V2
-		//float k_friction = Util::Max(circle->GetRigidBody()->friction, half_plane->GetRigidBody()->friction); //0.2f
-		//
-		//glm::vec2 parallel = FGravity + FNormal; //Parallel Vector, Opposite of Friction
+		float k_friction = Util::Max(circle->GetRigidBody()->friction, half_plane->GetRigidBody()->friction); //0.2f
+		
+		glm::vec2 parallel = FGravity + FNormal; //Parallel Vector, Opposite of Friction
 
-		//float FrictionMagnitude = Util::Min(k_friction * Util::Magnitude(FNormal), Util::Magnitude(parallel)); 
-		//
-		//glm::vec2 FFriction = FrictionMagnitude * -Util::Normalize(parallel);
+		float FrictionMagnitude = Util::Min(k_friction * Util::Magnitude(FNormal), Util::Magnitude(parallel)); 
+		
+		glm::vec2 FFriction = FrictionMagnitude * -Util::Normalize(parallel);
 
-		//circle->GetRigidBody()->netForce += FFriction;
+		circle->GetRigidBody()->netForce += FFriction;
 	}
 
 	//overlapping
@@ -112,7 +111,7 @@ void PhysicsEngine::Update()
 			{
 				if (CircleCircleCheck((CollisionCircle*)object1, (CollisionCircle*)object2))
 				{
-				
+			
 				}
 			}
 
@@ -127,7 +126,7 @@ void PhysicsEngine::Update()
 		}
 
 		object1->GetRigidBody()->acceleration = object1->GetRigidBody()->netForce / object1->GetRigidBody()->mass;
-		object1->GetRigidBody()->velocity = object1->GetRigidBody()->acceleration * fixedDeltatime;
+		object1->GetRigidBody()->velocity += object1->GetRigidBody()->acceleration * fixedDeltatime;
 		object1->GetTransform()->position += object1->GetRigidBody()->velocity;
 
 		if (object1->GetShape() == CIRCLE)

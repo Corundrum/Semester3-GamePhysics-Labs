@@ -83,27 +83,31 @@ void PlayScene::Start()
 	/*------- Circles -------*/
 	m_pCircles.push_back(new Target(glm::vec4(0.7f, 0.0f, 0.0f, 1.0f)));
 	m_pCircles.back()->GetTransform()->position = glm::vec2(100.0f, 100.0f);
+	m_pCircles.back()->GetRigidBody()->name = "Red Circle";
 	AddChild(m_pCircles.back());
 	m_pCircles.back()->GetRigidBody()->friction = 0.1f;
 	m_pCircles.back()->GetRigidBody()->mass = 2.0f;
 
-	/*m_pCircles.push_back(new Target(glm::vec4(0.0f, 0.7f, 0.0f, 1.0f)));
+	m_pCircles.push_back(new Target(glm::vec4(0.0f, 0.7f, 0.0f, 1.0f)));
 	m_pCircles.back()->GetTransform()->position = glm::vec2(300.0f, 100.0f);
+	m_pCircles.back()->GetRigidBody()->name = "Green Circle";
 	AddChild(m_pCircles.back());
 	m_pCircles.back()->GetRigidBody()->friction = 0.8f;
 	m_pCircles.back()->GetRigidBody()->mass = 2.0f;
 
 	m_pCircles.push_back(new Target(glm::vec4(0.0f, 0.0f, 0.7f, 1.0f)));
 	m_pCircles.back()->GetTransform()->position = glm::vec2(500.0f, 100.0f);
+	m_pCircles.back()->GetRigidBody()->name = "Blue Circle";
 	AddChild(m_pCircles.back());
 	m_pCircles.back()->GetRigidBody()->friction = 0.1f;
 	m_pCircles.back()->GetRigidBody()->mass = 8.0f;
 
 	m_pCircles.push_back(new Target(glm::vec4(0.75f, 0.7f, 0.0f, 1.0f)));
 	m_pCircles.back()->GetTransform()->position = glm::vec2(700.0f, 100.0f);
+	m_pCircles.back()->GetRigidBody()->name = "Yellow Circle";
 	AddChild(m_pCircles.back());
 	m_pCircles.back()->GetRigidBody()->friction = 0.8f;
-	m_pCircles.back()->GetRigidBody()->mass = 8.0f;*/
+	m_pCircles.back()->GetRigidBody()->mass = 8.0f;
 
 	/*------- HalfPlane -------*/
 	m_pGroundPlane = new Ground();

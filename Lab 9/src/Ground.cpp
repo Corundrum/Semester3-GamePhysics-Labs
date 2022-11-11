@@ -11,6 +11,7 @@ Ground::Ground()
 	GetTransform()->position = glm::vec2(400.0f, 400.0f);
 	SetNormalAngle(GetNormalAngle());
 	GetRigidBody()->friction = 1.0f;
+	GetRigidBody()->mass = 1000000.0f;
 }
 
 void Ground::Draw()
