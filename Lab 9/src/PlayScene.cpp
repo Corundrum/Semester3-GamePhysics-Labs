@@ -24,25 +24,23 @@ void PlayScene::Draw()
 	for (auto circle : m_pCircles)
 	{
 		glm::vec2 FGravity = circle->GetRigidBody()->mass * PhysicsEngine::Instance().gravityAcceleration;
-
+		glm::vec2 FNormal = -Util::Project(FGravity, m_pGroundPlane->GetNormalVector());
+		
+		//friction
 		float NormalMag = Util::Dot(FGravity, m_pGroundPlane->GetNormalVector());
-
-
 		glm::vec2 perp = NormalMag * m_pGroundPlane->GetNormalVector();
 		glm::vec2 parallel = FGravity - perp;
-
 		float FNormalMagnitude = abs(NormalMag);
-
 		glm::vec2 frictionDirection = -Util::Normalize(parallel);
-
 		float k_friction = Util::Max(circle->GetRigidBody()->friction, m_pGroundPlane->GetRigidBody()->friction);
-
 		float FrictionMagnitude = Util::Min(k_friction * FNormalMagnitude, Util::Magnitude(parallel));
-
 		glm::vec2 FFriction = FrictionMagnitude * frictionDirection;
 
 		Util::DrawLine(circle->GetTransform()->position, circle->GetTransform()->position + FFriction, glm::vec4(1.0f, 0.7f, 0.0f, 1.0f));
 		Util::DrawLine(circle->GetTransform()->position, circle->GetTransform()->position + parallel, glm::vec4(0.0f, 0.7f, 0.7f, 1.0f));
+		Util::DrawLine(circle->GetTransform()->position, circle->GetTransform()->position + circle->GetRigidBody()->velocity, glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
+		Util::DrawLine(circle->GetTransform()->position, circle->GetTransform()->position + FGravity, glm::vec4(0.6f, 0.0f, 0.7f, 1.0f));
+		Util::DrawLine(circle->GetTransform()->position, circle->GetTransform()->position + FNormal, glm::vec4(0.0f, 0.7f, 0.0f, 1.0f));
 	}
 
 	
@@ -89,7 +87,7 @@ void PlayScene::Start()
 	m_pCircles.back()->GetRigidBody()->friction = 0.1f;
 	m_pCircles.back()->GetRigidBody()->mass = 2.0f;
 
-	m_pCircles.push_back(new Target(glm::vec4(0.0f, 0.7f, 0.0f, 1.0f)));
+	/*m_pCircles.push_back(new Target(glm::vec4(0.0f, 0.7f, 0.0f, 1.0f)));
 	m_pCircles.back()->GetTransform()->position = glm::vec2(300.0f, 100.0f);
 	AddChild(m_pCircles.back());
 	m_pCircles.back()->GetRigidBody()->friction = 0.8f;
@@ -105,7 +103,7 @@ void PlayScene::Start()
 	m_pCircles.back()->GetTransform()->position = glm::vec2(700.0f, 100.0f);
 	AddChild(m_pCircles.back());
 	m_pCircles.back()->GetRigidBody()->friction = 0.8f;
-	m_pCircles.back()->GetRigidBody()->mass = 8.0f;
+	m_pCircles.back()->GetRigidBody()->mass = 8.0f;*/
 
 	/*------- HalfPlane -------*/
 	m_pGroundPlane = new Ground();

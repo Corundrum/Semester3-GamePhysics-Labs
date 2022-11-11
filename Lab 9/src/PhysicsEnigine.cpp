@@ -91,7 +91,7 @@ bool PhysicsEngine::CircleHalfPlaneCheck(CollisionCircle* circle, CollisionHalfP
 
 void PhysicsEngine::Update()
 {
-
+	
 	//Physics
 	for (auto it = objects.begin(); it != objects.end(); it++)
 	{
@@ -126,8 +126,8 @@ void PhysicsEngine::Update()
 			}
 		}
 
-		object1->GetRigidBody()->acceleration = object1->GetRigidBody()->netForce / object1->GetRigidBody()->mass;	
-		object1->GetRigidBody()->velocity += object1->GetRigidBody()->acceleration * fixedDeltatime;
+		object1->GetRigidBody()->acceleration = object1->GetRigidBody()->netForce / object1->GetRigidBody()->mass;
+		object1->GetRigidBody()->velocity = object1->GetRigidBody()->acceleration * fixedDeltatime;
 		object1->GetTransform()->position += object1->GetRigidBody()->velocity;
 
 		if (object1->GetShape() == CIRCLE)
