@@ -81,33 +81,37 @@ void PlayScene::Start()
 	m_guiTitle = "Play Scene";
 
 	/*------- Circles -------*/
-	m_pCircles.push_back(new Target(glm::vec4(0.7f, 0.0f, 0.0f, 1.0f)));
-	m_pCircles.back()->GetTransform()->position = glm::vec2(100.0f, 100.0f);
+	/*m_pCircles.push_back(new Target(glm::vec4(0.7f, 0.0f, 0.0f, 1.0f)));
+	m_pCircles.back()->GetTransform()->position = glm::vec2(200.0f, 100.0f);
 	m_pCircles.back()->GetRigidBody()->name = "Red Circle";
+	m_pCircles.back()->GetRigidBody()->velocity = Util::AngleMagnitudeToVec2(0.0f, 8.0f);
 	AddChild(m_pCircles.back());
 	m_pCircles.back()->GetRigidBody()->friction = 0.1f;
 	m_pCircles.back()->GetRigidBody()->mass = 2.0f;
 
 	m_pCircles.push_back(new Target(glm::vec4(0.0f, 0.7f, 0.0f, 1.0f)));
-	m_pCircles.back()->GetTransform()->position = glm::vec2(300.0f, 100.0f);
+	m_pCircles.back()->GetTransform()->position = glm::vec2(250.0f, 150.0f);
 	m_pCircles.back()->GetRigidBody()->name = "Green Circle";
+	m_pCircles.back()->GetRigidBody()->velocity = Util::AngleMagnitudeToVec2(0.0f, -8.0f);
 	AddChild(m_pCircles.back());
 	m_pCircles.back()->GetRigidBody()->friction = 0.8f;
 	m_pCircles.back()->GetRigidBody()->mass = 2.0f;
 
 	m_pCircles.push_back(new Target(glm::vec4(0.0f, 0.0f, 0.7f, 1.0f)));
-	m_pCircles.back()->GetTransform()->position = glm::vec2(500.0f, 100.0f);
+	m_pCircles.back()->GetTransform()->position = glm::vec2(600.0f, 100.0f);
 	m_pCircles.back()->GetRigidBody()->name = "Blue Circle";
 	AddChild(m_pCircles.back());
 	m_pCircles.back()->GetRigidBody()->friction = 0.1f;
-	m_pCircles.back()->GetRigidBody()->mass = 8.0f;
+	m_pCircles.back()->GetRigidBody()->mass = 8.0f;*/
 
 	m_pCircles.push_back(new Target(glm::vec4(0.75f, 0.7f, 0.0f, 1.0f)));
-	m_pCircles.back()->GetTransform()->position = glm::vec2(700.0f, 100.0f);
+	m_pCircles.back()->GetTransform()->position = glm::vec2(650.0f, 150.0f);
 	m_pCircles.back()->GetRigidBody()->name = "Yellow Circle";
 	AddChild(m_pCircles.back());
 	m_pCircles.back()->GetRigidBody()->friction = 0.8f;
 	m_pCircles.back()->GetRigidBody()->mass = 8.0f;
+
+	std::cout << m_pCircles.back()->GetRigidBody()->velocity.x << ", " << m_pCircles.back()->GetRigidBody()->velocity.y << std::endl;
 
 	/*------- HalfPlane -------*/
 	m_pGroundPlane = new Ground();

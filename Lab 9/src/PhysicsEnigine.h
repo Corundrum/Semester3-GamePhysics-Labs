@@ -19,6 +19,8 @@ public:
 	
 	glm::vec2 FGravity;
 
+	float damping = 0.99f;
+
 public:
 	void AddObject(CollisionShape* object);
 

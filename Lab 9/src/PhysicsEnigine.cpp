@@ -24,7 +24,42 @@ bool PhysicsEngine::CircleCircleCheck(CollisionCircle* circle1, CollisionCircle*
 
 	if (distance <= sum_radius)
 	{
+		//prevent overlap
+		float actual_distance = distance - sum_radius;
+		glm::vec2 angleVec = Util::Normalize(glm::vec2(circle2->GetTransform()->position.x - circle1->GetTransform()->position.x, circle2->GetTransform()->position.y - circle1->GetTransform()->position.y));
+		//std::cout << angleVec.x << ", " << angleVec.y << std::endl;
+
+		circle1->GetTransform()->position += angleVec * actual_distance;
+		circle2->GetTransform()->position -= angleVec * actual_distance;
+
+
+
 		std::cout << circle1->GetRigidBody()->name << " collided with " << circle2->GetRigidBody()->name << std::endl;
+		
+		float Cr = 1.0f;
+
+		float m1 = circle1->GetRigidBody()->mass;
+		float m2 = circle2->GetRigidBody()->mass;
+
+		glm::vec2 u1 = circle1->GetRigidBody()->velocity;
+		glm::vec2 u2 = circle2->GetRigidBody()->velocity;
+
+		glm::vec2 mu1 = m1 * u1;
+		glm::vec2 mu2 = m2 * u2;
+
+		glm::vec2 initial_mass_velocity = mu1 + mu2;
+		float total_mass = m1 + m2;
+
+
+
+		glm::vec2 v1 = (initial_mass_velocity + (m2 * Cr * (u2 - u1))) / total_mass;
+		glm::vec2 v2 = (initial_mass_velocity + (m1 * Cr * (u1 - u2))) / total_mass;
+
+		circle1->GetRigidBody()->velocity = v1;
+		circle2->GetRigidBody()->velocity = v2;
+
+
+
 		return true;
 	}
 	return false;
@@ -35,7 +70,6 @@ bool PhysicsEngine::CircleHalfPlaneCheck(CollisionCircle* circle, CollisionHalfP
 	glm::vec2 relative_position = circle->GetTransform()->position - half_plane->GetTransform()->position;
 	float distance = Util::Dot(relative_position, half_plane->GetNormalVector()) - circle->GetRadius();
 
-	//Stopping the Ball
 	if (distance <= 0)
 	{
 		//circle->GetTransform()->position -= half_plane->GetNormalVector() * distance;
@@ -55,10 +89,7 @@ bool PhysicsEngine::CircleHalfPlaneCheck(CollisionCircle* circle, CollisionHalfP
 
 		float k_friction = Util::Max(circle->GetRigidBody()->friction, half_plane->GetRigidBody()->friction);
 
-
 		float FrictionMagnitude = Util::Min(k_friction * FNormalMagnitude, Util::Magnitude(parallel));
-
-		
 
 		glm::vec2 FFriction = FrictionMagnitude * frictionDirection;
 
@@ -74,19 +105,29 @@ bool PhysicsEngine::CircleHalfPlaneCheck(CollisionCircle* circle, CollisionHalfP
 		glm::vec2 FFriction = FrictionMagnitude * -Util::Normalize(parallel);
 
 		circle->GetRigidBody()->netForce += FFriction;
-	}
 
-	//overlapping
-	if (distance < 0)
-	{
+		//Conservation of Momentum
+		float Cr = 0.8f;
+		glm::vec2 u1 = circle->GetRigidBody()->velocity;
+
+		glm::vec2 v1 = -Cr * (-u1);
+
+		glm::vec2 iv1 = -Util::Normalize(v1);
+		glm::vec2 div1 = half_plane->GetNormalVector() - iv1;
+		glm::vec2 nv1 = half_plane->GetNormalVector() + div1;
+
+		v1 = Util::Project(-v1, nv1);
+		
+		circle->GetRigidBody()->velocity = v1;
+
 		circle->GetTransform()->position -= half_plane->GetNormalVector() * distance;
 		return true;
 	}
-		
+
+
 	
 	return false;
 }
-
 
 void PhysicsEngine::Update()
 {
@@ -108,26 +149,20 @@ void PhysicsEngine::Update()
 
 			/*-------CIRCLE TO CIRCLE-------*/
 			if (object1->GetShape() == CIRCLE && object2->GetShape() == CIRCLE)
-			{
-				if (CircleCircleCheck((CollisionCircle*)object1, (CollisionCircle*)object2))
-				{
-			
-				}
-			}
+				CircleCircleCheck((CollisionCircle*)object1, (CollisionCircle*)object2);
 
 			/*-------CIRCLE TO HALFPLANE-------*/
 			else if (object1->GetShape() == CIRCLE && object2->GetShape() == HALFPLANE)
-			{
-				if (CircleHalfPlaneCheck((CollisionCircle*)object1, (CollisionHalfPlane*)object2))
-				{
-					
-				}
-			}
+				CircleHalfPlaneCheck((CollisionCircle*)object1, (CollisionHalfPlane*)object2);
 		}
 
 		object1->GetRigidBody()->acceleration = object1->GetRigidBody()->netForce / object1->GetRigidBody()->mass;
 		object1->GetRigidBody()->velocity += object1->GetRigidBody()->acceleration * fixedDeltatime;
+		object1->GetRigidBody()->velocity *= damping;
+
 		object1->GetTransform()->position += object1->GetRigidBody()->velocity;
+		
+		std::cout << object1->GetRigidBody()->velocity.x << ", " << object1->GetRigidBody()->velocity.y << std::endl;
 
 		if (object1->GetShape() == CIRCLE)
 		{
@@ -135,6 +170,7 @@ void PhysicsEngine::Update()
 			//std::cout << "Velocity: " << object1->GetRigidBody()->velocity.x << ", " << object1->GetRigidBody()->velocity.y << std::endl;
 			//std::cout << "Net Force: " << object1->GetRigidBody()->netForce.x << ", " << object1->GetRigidBody()->netForce.y << std::endl;
 		}
+		
 
 		//reset net force
 		object1->GetRigidBody()->netForce = glm::vec2(0.0f, 0.0f);
