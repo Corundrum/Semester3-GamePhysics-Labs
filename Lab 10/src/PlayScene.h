@@ -35,8 +35,6 @@ private:
 
 	Ground* m_pGroundPlane;
 
-
-
 	bool RunPhysics = true;
 };
 
