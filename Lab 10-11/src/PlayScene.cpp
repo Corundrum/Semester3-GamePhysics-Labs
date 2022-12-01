@@ -92,7 +92,7 @@ void PlayScene::Start()
 	AddChild(m_pCircles.back());
 
 	//circle 2
-	m_pCircles.push_back(new Target(glm::vec4(0.0f, 0.7f, 0.0f, 1.0f), 20.0f, RUBBER));
+	m_pCircles.push_back(new Target(glm::vec4(0.0f, 0.7f, 0.0f, 1.0f), 20.0f, STEEL));
 	m_pCircles.back()->GetTransform()->position = glm::vec2(300.0f, 100.0f);
 	m_pCircles.back()->GetRigidBody()->name = "Green Circle";
 	m_pCircles.back()->GetRigidBody()->velocity = Util::AngleMagnitudeToVec2(180.0f, 8.0f);
