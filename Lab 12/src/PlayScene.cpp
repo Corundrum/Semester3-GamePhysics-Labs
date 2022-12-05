@@ -116,24 +116,33 @@ void PlayScene::Start()
 	
 	
 	/*------- AABB -------*/
-	//m_pRectangle = new Rectangle(glm::vec4(0.8f, 0.0f, 0.1f, 1.0f), 30.0f, 20.0f, STEEL);
-	//AddChild(m_pRectangle);
-	
+	m_pGroundBox = new Box(glm::vec4(0.8f, 0.0f, 0.1f, 1.0f), 650.0f, 20.0f, STEEL);
+	m_pGroundBox->GetTransform()->position = glm::vec2(640.0f, 650.0f);
+	m_pGroundBox->GetRigidBody()->gravityScale = 0.0f;
+	m_pGroundBox->GetRigidBody()->affectedByPhysics = false;
+	AddChild(m_pGroundBox);
 
+	//Box1
+	m_pBoxes.push_back(new Box(glm::vec4(0.0f, 1.0f, 0.6f, 1.0f), 60.0f, 35.0f, STEEL));
+	m_pBoxes.back()->GetTransform()->position = glm::vec2(500.0f, 200.0f);
+	AddChild(m_pBoxes.back());
 
-
-
+	//Box2
+	m_pBoxes.push_back(new Box(glm::vec4(0.0f, 1.0f, 1.0f, 1.0f), 60.0f, 35.0f, RUBBER));
+	m_pBoxes.back()->GetTransform()->position = glm::vec2(530.0f, -100.0f);
+	AddChild(m_pBoxes.back());
 
 	/*------- HalfPlane -------*/
-	m_pGroundPlane = new Ground();
-	AddChild(m_pGroundPlane);
-	m_pGroundPlane->SetMaterial(DIRT);
+	//m_pGroundPlane = new Ground();
+	//AddChild(m_pGroundPlane);
+	//m_pGroundPlane->GetTransform()->position = glm::vec2(400.0f, 700.0f);
+	//m_pGroundPlane->SetMaterial(DIRT);
 
-	m_pGroundPlane2 = new Ground();
-	AddChild(m_pGroundPlane2);
-	m_pGroundPlane2->SetNormalAngle(0);
-	m_pGroundPlane2->GetTransform()->position.x = 10;
-	m_pGroundPlane->SetMaterial(STEEL);
+	//m_pGroundPlane2 = new Ground();
+	//AddChild(m_pGroundPlane2);
+	//m_pGroundPlane2->SetNormalAngle(0);
+	//m_pGroundPlane2->GetTransform()->position.x = 10;
+	//m_pGroundPlane->SetMaterial(STEEL);
 
 
 
@@ -153,21 +162,6 @@ void PlayScene::GUI_Function()
 	ImGui::Separator;
 
 
-
-	ImGui::SliderFloat2("Ground Position", &m_pGroundPlane->GetTransform()->position.x, 0, 800);
-
-	float GroundAngle = m_pGroundPlane->GetNormalAngle();
-	if (ImGui::SliderFloat("Ground Angle", &GroundAngle, 0, 360))
-	{
-		m_pGroundPlane->SetNormalAngle(GroundAngle);
-	}
-
-	ImGui::SliderFloat("Ground Friction", &m_pGroundPlane->GetRigidBody()->friction, 0, 100);
-
-	/*for (auto circle : m_pCircles)
-	{
-		ImGui::SliderFloat("Ball Friction", &circle->GetRigidBody()->friction, 0, 100);
-	}*/
 
 	ImGui::Separator;
 	ImGui::End();

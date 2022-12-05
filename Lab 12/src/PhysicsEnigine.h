@@ -4,6 +4,7 @@
 class CollisionShape;
 class CollisionCircle;
 class CollisionHalfPlane;
+class CollisionAABB;
 
 class PhysicsEngine
 {
@@ -26,6 +27,7 @@ public:
 
 	bool CircleCircleCheck(CollisionCircle* circle1, CollisionCircle* circle2);
 	bool CircleHalfPlaneCheck(CollisionCircle* circle, CollisionHalfPlane* half_plane);
+	bool AABBAABBCheck(CollisionAABB* aabb1, CollisionAABB* aabb2);
 
 	void Update();
 

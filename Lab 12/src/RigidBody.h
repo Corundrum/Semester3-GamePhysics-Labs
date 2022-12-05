@@ -15,5 +15,6 @@ struct RigidBody
 	glm::vec2 acceleration = glm::vec2(0.0f, 0.0f);
 	float gravityScale = 1.0f;
 	bool isColliding = false;
+	bool affectedByPhysics = true;
 };
 #endif /* defined (__RIGID_BODY__) */

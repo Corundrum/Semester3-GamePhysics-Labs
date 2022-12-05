@@ -75,7 +75,7 @@ Shape CollisionAABB::GetShape()
 
 int CollisionAABB::GetSize()
 {
-	return width * height;
+	return (width * height);
 }
 
 float CollisionAABB::GetWidth()

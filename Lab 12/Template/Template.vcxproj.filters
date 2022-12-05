@@ -150,7 +150,7 @@
     <ClCompile Include="..\src\Target.cpp">
       <Filter>Physics</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\Rectangle.cpp">
+    <ClCompile Include="..\src\Box.cpp">
       <Filter>Physics</Filter>
     </ClCompile>
   </ItemGroup>
@@ -311,7 +311,7 @@
     <ClInclude Include="..\src\Target.h">
       <Filter>Physics</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\Rectangle.h">
+    <ClInclude Include="..\src\Box.h">
       <Filter>Physics</Filter>
     </ClInclude>
   </ItemGroup>

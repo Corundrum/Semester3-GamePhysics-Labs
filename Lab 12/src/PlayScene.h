@@ -8,7 +8,7 @@
 
 #include "Target.h"
 #include "Ground.h"
-#include "Rectangle.h"
+#include "Box.h"
 
 #include "PhysicsEnigine.h"
 
@@ -31,8 +31,9 @@ private:
 	std::string m_guiTitle;
 	glm::vec2 m_mousePosition;
 
-	Rectangle* m_pRectangle;
+	Box* m_pGroundBox;
 
+	std::vector<Box*> m_pBoxes;
 	std::vector<Target*> m_pCircles;
 
 	Target* grabbedCircle;
