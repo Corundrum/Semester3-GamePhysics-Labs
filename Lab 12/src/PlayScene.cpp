@@ -124,12 +124,23 @@ void PlayScene::Start()
 
 	//Box1
 	m_pBoxes.push_back(new Box(glm::vec4(0.0f, 1.0f, 0.6f, 1.0f), 60.0f, 35.0f, STEEL));
-	m_pBoxes.back()->GetTransform()->position = glm::vec2(500.0f, 200.0f);
+	m_pBoxes.back()->GetTransform()->position = glm::vec2(620.0f, 550.0f);
 	AddChild(m_pBoxes.back());
 
 	//Box2
 	m_pBoxes.push_back(new Box(glm::vec4(0.0f, 1.0f, 1.0f, 1.0f), 60.0f, 35.0f, RUBBER));
-	m_pBoxes.back()->GetTransform()->position = glm::vec2(530.0f, -100.0f);
+	m_pBoxes.back()->GetTransform()->position = glm::vec2(630.0f, 600.0f);
+	AddChild(m_pBoxes.back());
+
+	//Box3
+	m_pBoxes.push_back(new Box(glm::vec4(1.0f, 0.0f, 1.0f, 1.0f), 60.0f, 35.0f, DIRT));
+	m_pBoxes.back()->GetTransform()->position = glm::vec2(635.0f, 500.0f);
+	AddChild(m_pBoxes.back());
+
+	//Box4
+	m_pBoxes.push_back(new Box(glm::vec4(0.0f, 0.5f, 0.1f, 1.0f), 60.0f, 35.0f, DIRT));
+	m_pBoxes.back()->GetTransform()->position = glm::vec2(400.0f, 520.0f);
+	m_pBoxes.back()->GetRigidBody()->velocity = Util::AngleMagnitudeToVec2(0.0f, 10.0f);
 	AddChild(m_pBoxes.back());
 
 	/*------- HalfPlane -------*/
