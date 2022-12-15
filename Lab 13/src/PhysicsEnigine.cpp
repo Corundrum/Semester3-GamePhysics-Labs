@@ -126,16 +126,17 @@ bool PhysicsEngine::CircleAABBCheck(CollisionCircle* circle, CollisionAABB* aabb
 
 	glm::vec2 rectanglePoint;
 	
-	rectanglePoint.x = Util::Clamp(circleCenter.x, aabb->GetTransform()->position.x - aabb->GetWidth() / 2, aabb->GetTransform()->position.x + aabb->GetWidth() / 2);
-	rectanglePoint.y = Util::Clamp(circleCenter.y, aabb->GetTransform()->position.y - aabb->GetHeight() / 2, aabb->GetTransform()->position.y + aabb->GetHeight() / 2);
+	glm::vec2 minRec = glm::vec2(aabb->GetTransform()->position.x - aabb->GetWidth() / 2, aabb->GetTransform()->position.y - aabb->GetHeight() / 2);
+	glm::vec2 maxRec = glm::vec2(aabb->GetTransform()->position.x + aabb->GetWidth() / 2, aabb->GetTransform()->position.y + aabb->GetHeight() / 2);
+
+	rectanglePoint = Util::ClampEdge(circleCenter, minRec, maxRec);
+
+	//rectanglePoint.x = Util::Clamp(circleCenter.x, aabb->GetTransform()->position.x - aabb->GetWidth() / 2, aabb->GetTransform()->position.x + aabb->GetWidth() / 2);
+	//rectanglePoint.y = Util::Clamp(circleCenter.y, aabb->GetTransform()->position.y - aabb->GetHeight() / 2, aabb->GetTransform()->position.y + aabb->GetHeight() / 2);
 
 	glm::vec2 circlebounds = (Util::Normalize(rectanglePoint - circleCenter) * circle->GetRadius()) + circleCenter;
 	
 	glm::vec2 aabbpos = aabb->GetTransform()->position;
-
-	glm::vec2 rectangleTL = aabbpos;
-	rectangleTL.x = rectangleTL.x - aabb->GetWidth() / 2;
-	rectangleTL.y = rectangleTL.y - aabb->GetHeight() / 2;
 	
 
 	bool exitflag = false;
@@ -147,7 +148,7 @@ bool PhysicsEngine::CircleAABBCheck(CollisionCircle* circle, CollisionAABB* aabb
 	{
 		exitflag = true;
 	}
-	if (!CollisionManager::LineRectCheck(circleCenter, circlebounds, rectangleTL, aabb->GetWidth(), aabb->GetHeight()) && exitflag)
+	if (!CollisionManager::LineRectCheck(circleCenter, circlebounds, minRec, aabb->GetWidth(), aabb->GetHeight()) && exitflag)
 	{
 		return false;
 	}
@@ -161,12 +162,10 @@ bool PhysicsEngine::CircleAABBCheck(CollisionCircle* circle, CollisionAABB* aabb
 	if (abs(xoverlap) > abs(yoverlap))
 	{
 		minimum_translation = glm::vec2(xoverlap, 0.0f);
-		std::cout << "X: " << xoverlap << std::endl;
 	}
 	else
 	{
 		minimum_translation = glm::vec2(0.0f, yoverlap);
-		std::cout << "Y: " << yoverlap << std::endl;
 	}
 
 	float m1 = circle->GetRigidBody()->mass;

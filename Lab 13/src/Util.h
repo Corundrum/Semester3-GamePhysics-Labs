@@ -25,6 +25,8 @@ public:
 
 	static glm::vec2 Clamp(glm::vec2 vec, float max_length);
 
+	static glm::vec2 ClampEdge(glm::vec2 vec, glm::vec2 min, glm::vec2 max);
+
 	static float Clamp01(float value);
 	static float Distance(glm::vec2 vec_a, glm::vec2 vec_b);
 	static float SquaredDistance(glm::vec2 vec_a, glm::vec2 vec_b);

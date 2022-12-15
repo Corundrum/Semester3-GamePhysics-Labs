@@ -51,6 +51,62 @@ glm::vec2 Util::Clamp(const glm::vec2 vec, const float max_length)
 	return vec;
 }
 
+glm::vec2 Util::ClampEdge(glm::vec2 vec, glm::vec2 min, glm::vec2 max)
+{
+	//if x is larger than max or smaller than min
+	if (vec.x < min.x) 
+	{
+		vec.x = min.x;
+	}
+	else if (vec.x > max.x)
+	{
+		vec.x = max.x;
+	}
+	//if y is larger than max or smaller than min
+	if (vec.y < min.y)
+	{
+		vec.y = min.y;
+	}
+	else if (vec.y > max.y)
+	{
+		vec.y = max.y;
+	}
+
+	if (vec.x > min.x && vec.x < max.x && vec.y > min.y && vec.y < max.y)
+	{
+		glm::vec2 middle = (min + max) * 0.5f;
+		glm::vec2 relative = vec - middle;
+		glm::vec2 percent = relative / ((max - min) * 0.5f);
+	
+
+		if (abs(percent.x) >= abs(percent.y))
+		{
+			if (percent.x < 0)
+			{
+				vec.x = min.x;
+			}
+			else
+			{
+				vec.x = max.x;
+			}
+		}
+		else
+		{
+
+			if (percent.y < 0)
+			{
+				vec.y = min.y;
+			}
+			else
+			{
+				vec.y = max.y;
+			}
+		}
+	}
+
+	return vec;
+}
+
 /**
 * Clamps a value between 0 and 1 and returns the result
 *

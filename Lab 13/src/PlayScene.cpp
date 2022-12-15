@@ -24,8 +24,11 @@ void PlayScene::Draw()
 	
 	glm::vec2 circleCenter = m_pCircles.back()->GetTransform()->position;
 	glm::vec2 rectanglePoint;
-	rectanglePoint.x = Util::Clamp(circleCenter.x, m_pGroundBox->GetTransform()->position.x - m_pGroundBox->GetWidth() / 2, m_pGroundBox->GetTransform()->position.x + m_pGroundBox->GetWidth() / 2);
-	rectanglePoint.y = Util::Clamp(circleCenter.y, m_pGroundBox->GetTransform()->position.y - m_pGroundBox->GetHeight() / 2, m_pGroundBox->GetTransform()->position.y + m_pGroundBox->GetHeight() / 2);
+	
+	glm::vec2 minRec = glm::vec2(m_pGroundBox->GetTransform()->position.x - m_pGroundBox->GetWidth() / 2, m_pGroundBox->GetTransform()->position.y - m_pGroundBox->GetHeight() / 2);
+	glm::vec2 maxRec = glm::vec2(m_pGroundBox->GetTransform()->position.x + m_pGroundBox->GetWidth() / 2, m_pGroundBox->GetTransform()->position.y + m_pGroundBox->GetHeight() / 2);
+
+	rectanglePoint = Util::ClampEdge(circleCenter, minRec, maxRec);
 	glm::vec2 circlebounds = (Util::Normalize(rectanglePoint - circleCenter) * m_pCircles.back()->GetRadius()) + circleCenter;
 	
 	//Draw Circle To Rectangle collision line bounds
@@ -33,6 +36,9 @@ void PlayScene::Draw()
 
 	//Draw Rectangle Clamped point
 	Util::DrawCircle(rectanglePoint, 3);
+
+	//Draw Circle Bound Point
+	Util::DrawCircle(circlebounds, 3, glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
 
 	SDL_SetRenderDrawColor(Renderer::Instance().GetRenderer(), 255, 255, 255, 255);
 }
@@ -101,6 +107,7 @@ void PlayScene::Start()
 	m_pCircles.back()->GetTransform()->position = glm::vec2(1200.0f, 100.0f);
 	m_pCircles.back()->GetRigidBody()->name = "Red Circle";
 	m_pCircles.back()->GetRigidBody()->velocity = Util::AngleMagnitudeToVec2(0.0f, -8.0f);
+	//m_pCircles.back()->GetRigidBody()->affectedByPhysics = false;
 	//m_pCircles.back()->GetRigidBody()->gravityScale = 0.0f;
 	AddChild(m_pCircles.back());
 
@@ -129,7 +136,7 @@ void PlayScene::Start()
 	
 	
 	/*------- AABB -------*/
-	m_pGroundBox = new Box(glm::vec4(0.8f, 0.0f, 0.1f, 1.0f), 650.0f, 20.0f, STEEL);
+	m_pGroundBox = new Box(glm::vec4(0.8f, 0.0f, 0.1f, 1.0f), 650.0f, 500.0f, STEEL);
 	m_pGroundBox->GetTransform()->position = glm::vec2(640.0f, 650.0f);
 	m_pGroundBox->GetRigidBody()->gravityScale = 0.0f;
 	m_pGroundBox->GetRigidBody()->affectedByPhysics = false;
