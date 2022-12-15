@@ -21,14 +21,18 @@ void PlayScene::Draw()
 {
 	DrawDisplayList();
 
+	
 	glm::vec2 circleCenter = m_pCircles.back()->GetTransform()->position;
 	glm::vec2 rectanglePoint;
 	rectanglePoint.x = Util::Clamp(circleCenter.x, m_pGroundBox->GetTransform()->position.x - m_pGroundBox->GetWidth() / 2, m_pGroundBox->GetTransform()->position.x + m_pGroundBox->GetWidth() / 2);
 	rectanglePoint.y = Util::Clamp(circleCenter.y, m_pGroundBox->GetTransform()->position.y - m_pGroundBox->GetHeight() / 2, m_pGroundBox->GetTransform()->position.y + m_pGroundBox->GetHeight() / 2);
-
 	glm::vec2 circlebounds = (Util::Normalize(rectanglePoint - circleCenter) * m_pCircles.back()->GetRadius()) + circleCenter;
-
+	
+	//Draw Circle To Rectangle collision line bounds
 	Util::DrawLine(circleCenter, circlebounds);
+
+	//Draw Rectangle Clamped point
+	Util::DrawCircle(rectanglePoint, 3);
 
 	SDL_SetRenderDrawColor(Renderer::Instance().GetRenderer(), 255, 255, 255, 255);
 }
@@ -94,10 +98,10 @@ void PlayScene::Start()
 	///*------- Circles -------*/
 	//circle 1
 	m_pCircles.push_back(new Target(glm::vec4(0.7f, 0.0f, 0.0f, 1.0f), 30.0f, STONE));
-	m_pCircles.back()->GetTransform()->position = glm::vec2(100.0f, 100.0f);
+	m_pCircles.back()->GetTransform()->position = glm::vec2(1200.0f, 100.0f);
 	m_pCircles.back()->GetRigidBody()->name = "Red Circle";
-	m_pCircles.back()->GetRigidBody()->velocity = Util::AngleMagnitudeToVec2(0.0f, 0.0f);
-	m_pCircles.back()->GetRigidBody()->gravityScale = 0.0f;
+	m_pCircles.back()->GetRigidBody()->velocity = Util::AngleMagnitudeToVec2(0.0f, -8.0f);
+	//m_pCircles.back()->GetRigidBody()->gravityScale = 0.0f;
 	AddChild(m_pCircles.back());
 
 	////circle 2
@@ -131,20 +135,20 @@ void PlayScene::Start()
 	m_pGroundBox->GetRigidBody()->affectedByPhysics = false;
 	AddChild(m_pGroundBox);
 
-	////Box1
-	//m_pBoxes.push_back(new Box(glm::vec4(0.0f, 1.0f, 0.6f, 1.0f), 60.0f, 35.0f, STEEL));
-	//m_pBoxes.back()->GetTransform()->position = glm::vec2(620.0f, 550.0f);
-	//AddChild(m_pBoxes.back());
+	//Box1
+	m_pBoxes.push_back(new Box(glm::vec4(0.0f, 1.0f, 0.6f, 1.0f), 60.0f, 35.0f, STEEL));
+	m_pBoxes.back()->GetTransform()->position = glm::vec2(620.0f, 550.0f);
+	AddChild(m_pBoxes.back());
 
-	////Box2
-	//m_pBoxes.push_back(new Box(glm::vec4(0.0f, 1.0f, 1.0f, 1.0f), 60.0f, 35.0f, RUBBER));
-	//m_pBoxes.back()->GetTransform()->position = glm::vec2(630.0f, 600.0f);
-	//AddChild(m_pBoxes.back());
+	//Box2
+	m_pBoxes.push_back(new Box(glm::vec4(0.0f, 1.0f, 1.0f, 1.0f), 60.0f, 35.0f, RUBBER));
+	m_pBoxes.back()->GetTransform()->position = glm::vec2(630.0f, 600.0f);
+	AddChild(m_pBoxes.back());
 
-	////Box3
-	//m_pBoxes.push_back(new Box(glm::vec4(1.0f, 0.0f, 1.0f, 1.0f), 60.0f, 35.0f, DIRT));
-	//m_pBoxes.back()->GetTransform()->position = glm::vec2(635.0f, 500.0f);
-	//AddChild(m_pBoxes.back());
+	//Box3
+	m_pBoxes.push_back(new Box(glm::vec4(1.0f, 0.0f, 1.0f, 1.0f), 60.0f, 35.0f, DIRT));
+	m_pBoxes.back()->GetTransform()->position = glm::vec2(635.0f, 500.0f);
+	AddChild(m_pBoxes.back());
 
 	
 
@@ -177,16 +181,28 @@ void PlayScene::GUI_Function()
 	ImGui::Begin("WindowWindow", nullptr, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoMove);
 	ImGui::Separator;
 
-	float posx = m_pCircles.back()->GetTransform()->position.x;
-	float posy = m_pCircles.back()->GetTransform()->position.y;
+	float posx = m_pBoxes.back()->GetTransform()->position.x;
+	float posy = m_pBoxes.back()->GetTransform()->position.y;
 
 	if (ImGui::SliderFloat("positionx", &posx, 0, 1024))
 	{
-		m_pCircles.back()->GetTransform()->position.x = posx;
+		m_pBoxes.back()->GetTransform()->position.x = posx;
 	}
 	if (ImGui::SliderFloat("positiony", &posy, 0, 720))
 	{
-		m_pCircles.back()->GetTransform()->position.y = posy;
+		m_pBoxes.back()->GetTransform()->position.y = posy;
+	}
+
+	float posx2 = m_pCircles.back()->GetTransform()->position.x;
+	float posy2 = m_pCircles.back()->GetTransform()->position.y;
+
+	if (ImGui::SliderFloat("positionx2", &posx2, 0, 1024))
+	{
+		m_pCircles.back()->GetTransform()->position.x = posx2;
+	}
+	if (ImGui::SliderFloat("positiony2", &posy2, 0, 720))
+	{
+		m_pCircles.back()->GetTransform()->position.y = posy2;
 	}
 
 	ImGui::Separator;

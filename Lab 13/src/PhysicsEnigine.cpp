@@ -120,6 +120,8 @@ bool PhysicsEngine::CircleHalfPlaneCheck(CollisionCircle* circle, CollisionHalfP
 
 bool PhysicsEngine::CircleAABBCheck(CollisionCircle* circle, CollisionAABB* aabb)
 {
+	//--------------- COLLISION CHECK ---------------//
+
 	glm::vec2 circleCenter = circle->GetTransform()->position;
 
 	glm::vec2 rectanglePoint;
@@ -149,9 +151,87 @@ bool PhysicsEngine::CircleAABBCheck(CollisionCircle* circle, CollisionAABB* aabb
 	{
 		return false;
 	}
+
+	//--------------- OVERLAP ---------------//
+	float xoverlap = rectanglePoint.x - circlebounds.x;
+	float yoverlap = rectanglePoint.y - circlebounds.y;
+
+	glm::vec2 minimum_translation;
+
+	if (abs(xoverlap) > abs(yoverlap))
+	{
+		minimum_translation = glm::vec2(xoverlap, 0.0f);
+		std::cout << "X: " << xoverlap << std::endl;
+	}
+	else
+	{
+		minimum_translation = glm::vec2(0.0f, yoverlap);
+		std::cout << "Y: " << yoverlap << std::endl;
+	}
+
+	float m1 = circle->GetRigidBody()->mass;
+	float m2 = aabb->GetRigidBody()->mass;
+
+	glm::vec2 u1 = circle->GetRigidBody()->velocity;
+	glm::vec2 u2 = aabb->GetRigidBody()->velocity;
+
+	if (circle->GetRigidBody()->affectedByPhysics && !aabb->GetRigidBody()->affectedByPhysics)
+	{
+		circle->GetTransform()->position += minimum_translation;
+	}
+	else if (!circle->GetRigidBody()->affectedByPhysics && aabb->GetRigidBody()->affectedByPhysics)
+	{
+		aabb->GetTransform()->position -= minimum_translation;
+	}
+	else if (circle->GetRigidBody()->affectedByPhysics && aabb->GetRigidBody()->affectedByPhysics)
+	{
+		float percent1 = m2 / (m1 + m2);
+		float percent2 = m1 / (m1 + m2);
+
+		circle->GetTransform()->position += minimum_translation * percent2;
+		aabb->GetTransform()->position -= minimum_translation * percent1;
+	}
+
+	//---------------Conservation of Momentum---------------//
+	glm::vec2 contact_normal = -Util::Normalize(minimum_translation);
 	
-	
-	
+	float approaching_speed = Util::Dot(u2 - u1, contact_normal);
+
+	if (approaching_speed < 0)
+	{
+		if (circle->GetRigidBody()->affectedByPhysics && aabb->GetRigidBody()->affectedByPhysics)
+		{
+			float restitution1 = ((circle->GetRigidBody()->restitution * 2.0f) + aabb->GetRigidBody()->restitution) / 3.0f;
+			float restitution2 = (circle->GetRigidBody()->restitution + (aabb->GetRigidBody()->restitution * 2.0f)) / 3.0f;
+
+
+			float impulse1 = -(1.0f + restitution1) * approaching_speed * m1 * m2 / (m1 + m2);
+			float impulse2 = -(1.0f + restitution2) * approaching_speed * m1 * m2 / (m1 + m2);
+
+			circle->GetRigidBody()->velocity += (impulse1 / m1) * -contact_normal;
+			aabb->GetRigidBody()->velocity += (impulse2 / m2) * contact_normal;
+		}
+		else if (!circle->GetRigidBody()->affectedByPhysics && aabb->GetRigidBody()->affectedByPhysics)
+		{
+
+			float restitution = ((aabb->GetRigidBody()->restitution * 2.0f) + circle->GetRigidBody()->restitution) / 3.0f;
+
+			float impulse = -(1.0f + restitution) * approaching_speed;
+
+			aabb->GetRigidBody()->velocity += (impulse)*contact_normal;
+
+		}
+		else if (circle->GetRigidBody()->affectedByPhysics && !aabb->GetRigidBody()->affectedByPhysics)
+		{
+			float restitution = ((circle->GetRigidBody()->restitution * 2.0f) + aabb->GetRigidBody()->restitution) / 3.0f;
+
+			float impulse = -(1.0f + restitution) * approaching_speed;
+
+			circle->GetRigidBody()->velocity -= (impulse) * contact_normal;
+		}
+
+		}
+
 	return true;
 }
 
